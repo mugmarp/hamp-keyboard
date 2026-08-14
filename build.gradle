@@ -201,8 +201,8 @@ android {
         versionName getVersionName()
         versionCode getVersionCode()
 
-        applicationId 'org.futo.inputmethod.latin'
-        testApplicationId 'org.futo.inputmethod.latin.tests'
+        applicationId 'org.futo.inputmethod.latin.hamp'
+        testApplicationId 'org.futo.inputmethod.latin.hamp.tests'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = false
     }
