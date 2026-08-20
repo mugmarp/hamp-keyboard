@@ -394,6 +394,19 @@ public final class InputAttributes {
         if(editorInfo.packageName.startsWith("com.android.virtualization.terminal") && noSuggestions)
             return CODE_FIELD_NO_COMPOSITION;
 
+        // Termius (com.server.auditor.ssh.client) is an SSH client/terminal app that needs
+        // DPAD key events for cursor movement (spacebar swipe, arrow keys) instead of
+        // the normal cursorStep()/setSelection() path. This is because Termius runs a
+        // remote shell where cursor positioning must be handled by the remote terminal
+        // emulator via DPAD key events, not by local text editing. Unlike typical text
+        // fields, Termius presents a terminal buffer where local cursor manipulation
+        // doesn't apply. We unconditionally treat it as a code field (NO_COMPOSITION)
+        // so spacebar swipe and arrow keys send DPAD_LEFT/DPAD_RIGHT key events.
+        // This matches the behavior of Termux, Termux-like terminals, and other SSH
+        // clients. See: https://github.com/termius/termius-app
+        if(editorInfo.packageName.startsWith("com.server.auditor.ssh.client"))
+            return CODE_FIELD_NO_COMPOSITION;
+
         return NOT_A_CODE_FIELD;
     }
 }
