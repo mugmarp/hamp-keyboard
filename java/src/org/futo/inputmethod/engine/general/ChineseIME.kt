@@ -836,6 +836,19 @@ class ChineseIME(val helper: IMEHelper) : IMEInterface, SuggestionStripViewAcces
             }
         }
     }
+    override fun onMovePointerVertical(steps: Int) {
+        var meta = 0
+        if (steps < 0) {
+            for(i in 0 until -steps) {
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP, meta)
+            }
+        } else {
+            for(i in 0 until steps) {
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN, meta)
+            }
+        }
+    }
+
     override fun onUpWithPointerActive() {
         // TODO("Unsupported yet")
     }

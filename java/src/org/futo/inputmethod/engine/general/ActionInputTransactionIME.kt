@@ -62,6 +62,7 @@ class ActionInputTransactionIME(val helper: IMEHelper) : IMEInterface, ActionInp
     override fun onFinishSlidingInput() {}
     override fun onCustomRequest(requestCode: Int): Boolean = false
     override fun onMovePointer(steps: Int, stepOverWords: Boolean, select: Boolean?) {}
+    override fun onMovePointerVertical(steps: Int) {}
     override fun onMoveDeletePointer(steps: Int) {}
     override fun onUpWithDeletePointerActive() {}
     override fun onUpWithPointerActive() {}

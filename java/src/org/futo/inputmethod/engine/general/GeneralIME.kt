@@ -659,6 +659,14 @@ class GeneralIME(val helper: IMEHelper) : IMEInterface, WordLearner, SuggestionS
         }
     }
 
+    override fun onMovePointerVertical(steps: Int) {
+        if (steps < 0) {
+            inputLogic.cursorUp(-steps)
+        } else {
+            inputLogic.cursorDown(steps)
+        }
+    }
+
     override fun onMoveDeletePointer(steps: Int) {
         setNeutralSuggestionStrip()
         if (inputLogic.mConnection.hasCursorPosition()) {

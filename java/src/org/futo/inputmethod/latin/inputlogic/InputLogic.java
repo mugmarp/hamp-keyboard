@@ -3017,4 +3017,34 @@ public final class InputLogic {
             }
         }
     }
+
+    /**
+     * Shifts the cursor up by a number of lines
+     * @param steps How many lines to step over
+     */
+    public void cursorUp(int steps) {
+        final SettingsValues settingsValues = Settings.getInstance().getCurrent();
+        steps = Math.abs(steps);
+        mConnection.finishComposingText();
+        int meta = 0;
+        mConnection.beginBatchEdit();
+        for(int i=0; i<steps; i++)
+            sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP, meta);
+        mConnection.endBatchEdit();
+    }
+
+    /**
+     * Shifts the cursor down by a number of lines
+     * @param steps How many lines to step over
+     */
+    public void cursorDown(int steps) {
+        final SettingsValues settingsValues = Settings.getInstance().getCurrent();
+        steps = Math.abs(steps);
+        mConnection.finishComposingText();
+        int meta = 0;
+        mConnection.beginBatchEdit();
+        for(int i=0; i<steps; i++)
+            sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN, meta);
+        mConnection.endBatchEdit();
+    }
 }

@@ -1191,6 +1191,10 @@ class JapaneseIME(val helper: IMEHelper) : IMEInterface {
 
     }
 
+    override fun onMovePointerVertical(steps: Int) {
+
+    }
+
     override fun onMoveDeletePointer(steps: Int) {
 
     }

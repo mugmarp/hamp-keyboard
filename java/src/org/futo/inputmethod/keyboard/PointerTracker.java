@@ -102,6 +102,10 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             Resources.getSystem().getDisplayMetrics().widthPixels * 3 / 2
     );
 
+    // Vertical swipe detection constants for spacebar cursor movement
+    private static final int VERTICAL_SWIPE_THRESHOLD = 8;
+    private static final int HORIZONTAL_VERTICAL_RATIO = 2;
+
     private static GestureStrokeRecognitionParams sGestureStrokeRecognitionParams;
     private static GestureStrokeDrawingParams sGestureStrokeDrawingParams;
     private static boolean sNeedsPhantomSuddenMoveEventHack;
@@ -997,6 +1001,18 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
                         mCursorMoved = true;
                         mStartX += steps * pointerStep;
                         sListener.onMovePointer(steps);
+                    }
+                }
+
+                // Detect vertical swipe on spacebar for cursor movement
+                int dx = x - mStartX;
+                int dy = y - mStartY;
+                if (Math.abs(dy) > Math.abs(dx) * HORIZONTAL_VERTICAL_RATIO && Math.abs(dy) > VERTICAL_SWIPE_THRESHOLD) {
+                    int verticalSteps = dy / pointerStep;
+                    if (verticalSteps != 0) {
+                        mCursorMoved = true;
+                        mStartY += verticalSteps * pointerStep;
+                        sListener.onMovePointerVertical(verticalSteps);
                     }
                 }
 
