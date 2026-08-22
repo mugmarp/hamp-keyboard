@@ -41,8 +41,11 @@
          android:supportsRtl="true"
          android:allowBackup="true"
          android:largeHeap="true"
-         android:enableOnBackInvokedCallback="true"
-         android:name=".CrashLoggingApplication">
+         android:enableOnBackInvokedCallback="true">
+<!-- No custom Application class: CrashLoggingApplication (and ACRA) were removed with the
+     FUTO-specific crash reporting system. The default android.app.Application is used.
+     If you ever re-add an Application subclass, restore android:name here AND make sure
+     the class is in a sourceSet compiled for every flavor (java/src), not just playstore. -->
 
         <!-- Services -->
         <service android:name=".LatinIME"
@@ -149,26 +152,10 @@
 
         </service>
         -->
+        <!-- PaymentCompleteActivity was removed along with the FUTO payment system.
+             If a payment flow is reintroduced, restore both the activity class and this entry. -->
         <activity
-            android:name=".payment.PaymentCompleteActivity"
-            android:exported="true"
-            android:label="@string/payment_screen_payment_complete_title"
-            android:clearTaskOnLaunch="false"
-            android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="futo-voice-input" />
-                <data android:scheme="futo-keyboard" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".MicPermissionActivity"
+            android:name="org.futo.inputmethod.latin.MicPermissionActivity"
             android:clearTaskOnLaunch="false"
             android:launchMode="standard"
             android:noHistory="true"

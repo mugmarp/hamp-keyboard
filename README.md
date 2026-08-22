@@ -1,52 +1,38 @@
-# FUTO Keyboard
+# Hamp Keyboard
 
-The goal is to make a good modern keyboard that stays offline and doesn't spy on you. This keyboard is a fork of [LatinIME, The Android Open-Source Keyboard](https://android.googlesource.com/platform/packages/inputmethods/LatinIME), with significant changes made to it.
+Hamp Keyboard is a fork of the [FUTO Keyboard](https://github.com/futo-org/android-keyboard) (itself a fork of [LatinIME, The Android Open-Source Keyboard](https://android.googlesource.com/platform/packages/inputmethods/LatinIME)), customized to install side-by-side with the official FUTO Keyboard app.
 
-Check out the [FUTO Keyboard website](https://keyboard.futo.tech/) for downloads and more information.
+- **Package name:** `org.futo.inputmethod.latin.hamp`
+- **Display name:** Hamp Keyboard
+- All previously external dependencies (layouts, themes, dictionaries, translations, swipe models, AARs) are vendored directly into this repository — no submodules or GitLab access required.
 
-The code is licensed under the [FUTO Source First License 1.1](LICENSE.md).
+## Known issues
 
-## Issue tracking and contributing
+- **UI glitch during frame transitions**: there is a known rendering issue where frames transition incorrectly (visual flicker/artifacts when switching between keyboard views/screens). The app is otherwise stable and functional. This is tracked as a known cosmetic issue pending investigation.
 
-Please check the GitHub repository to report issues: [https://github.com/futo-org/android-keyboard/](https://github.com/futo-org/android-keyboard/)
+## Changelog
 
-The source code is hosted on our [internal GitLab](https://gitlab.futo.org/keyboard/latinime) and mirrored to [GitHub](https://github.com/futo-org/android-keyboard/). As registration is closed on our internal GitLab, we use GitHub instead for issues and pull requests.
-
-Due to custom license, pull requests to this repository require signing a [CLA](https://cla.futo.org/) which you can do after opening a PR. Contributions to the [layouts repo](https://github.com/futo-org/futo-keyboard-layouts) don't require CLA as they're Apache-2.0
-
-If you want to help translate the app, please do so via our Pontoon instance: https://i18n-keyboard.futo.org/
-
-## Layouts
-
-If you want to contribute layouts, check out the [layouts repo](https://github.com/futo-org/futo-keyboard-layouts).
+### 1.0.0 (1)
+- Renamed app to "Hamp Keyboard" with applicationId `org.futo.inputmethod.latin.hamp` for side-by-side installation with FUTO Keyboard.
+- Removed FUTO-specific payment, update checking, and crash reporting systems.
+- Fixed crash on startup caused by manifest references to removed classes (`CrashLoggingApplication`, `PaymentCompleteActivity`).
+- Vendored all submodule dependencies into the repository.
+- Vertical spacebar swipe for all text fields; Termius spacebar swipe cursor movement fix.
 
 ## Building
 
-When cloning the repository, you must perform a recursive clone to fetch all dependencies:
+No recursive clone needed — everything is in this repository:
 ```
-git clone --recursive https://gitlab.futo.org/keyboard/latinime.git
-```
-
-If you forgot to specify recursive clone, use this to fetch submodules:
-```
-git submodule update --init --recursive
+git clone https://github.com/mugmarp/HAMP_KEYBOARD.git
 ```
 
 You can then open the project in Android Studio and build it that way, or use gradle commands:
 ```
-./gradlew assembleUnstableDebug
+./gradlew assembleStableDebug
 ./gradlew assembleStableRelease
 ```
 
-## APK signing
+## Licensing
 
-For official FUTO Keyboard versions, you can verify the APK's signing key fingerprint for integrity.
+The original code is licensed under the [FUTO Source First License 1.1](LICENSE.md).
 
-```
-Signing key fingerprint for all versions except Google Play:
-
-MD5: 3A:BB:71:C6:BB:E4:92:27:B1:E3:5D:81:01:48:6A:B0
-SHA1: 5D:15:B3:6E:C9:6A:96:28:41:09:DD:62:93:0D:9C:39:9F:5F:06:43
-SHA-256: 74:3F:AD:58:64:AB:C4:26:50:0B:2D:C2:C4:7C:8A:D3:24:CB:CD:16:03:3F:80:16:99:48:41:35:63:74:F9:95
-
-```
