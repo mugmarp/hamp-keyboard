@@ -32,6 +32,10 @@ You can then open the project in Android Studio and build it that way, or use gr
 ./gradlew assembleStableRelease
 ```
 
+## Credits
+
+All credit for the original codebase goes to the [80+ contributors of FUTO Keyboard](https://github.com/futo-org/android-keyboard/graphs/contributors), whose work makes up the vast majority of this repository's history. The contributor list shown on GitHub reflects those original authors, not active Hamp Keyboard developers.
+
 ## Licensing
 
 The original code is licensed under the [FUTO Source First License 1.1](LICENSE.md).
