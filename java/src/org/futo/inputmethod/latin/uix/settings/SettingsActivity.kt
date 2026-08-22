@@ -49,7 +49,6 @@ import org.futo.inputmethod.latin.uix.theme.UixThemeAuto
 import org.futo.inputmethod.latin.uix.theme.getThemeOption
 import org.futo.inputmethod.latin.uix.theme.orDefault
 import org.futo.inputmethod.latin.xlm.ModelPaths
-import org.futo.inputmethod.updates.checkForUpdateAndSaveToPreferences
 import org.futo.inputmethod.v2keyboard.LayoutManager
 import java.io.File
 import kotlin.math.sqrt
@@ -224,10 +223,6 @@ class SettingsActivity : ComponentActivity(), DynamicThemeProviderOwner {
                 updateSystemState()
                 updateContent()
             }
-        }
-
-        lifecycleScope.launch {
-            checkForUpdateAndSaveToPreferences(applicationContext)
         }
 
         lifecycleScope.launch {

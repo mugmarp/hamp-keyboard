@@ -28,7 +28,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -198,41 +200,52 @@ fun ResizeScreen(navController: NavHostController = rememberNavController()) {
     }
 
     Box {
-        ScrollableList {
-            ScreenTitle(stringResource(R.string.size_settings_title), showBack = true, navController)
+            ScrollableList {
+                ScreenTitle(stringResource(R.string.size_settings_title), showBack = true, navController)
 
-            PaymentSurface(
-                isPrimary = false,
-            ) {
-                PaymentSurfaceHeading(title = stringResource(R.string.settings_tip))
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp),
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text(
+                        stringResource(R.string.settings_tip),
+                        style = Typography.Body.MediumMl,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.padding(top = 19.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    )
 
-                Text(
-                    buildAnnotatedString {
-                        append(stringResource(R.string.size_settings_keyboard_modes_tip))
-                        append(" ")
-                        appendInlineContent("icon")
-                        appendLine()
-                        append(stringResource(R.string.size_settings_keyboard_modes_portrait_landscape_tip))
-                        appendLine()
-                        append(stringResource(R.string.size_settings_resize_tip))
-                    },
-                    style = Typography.Body.MediumMl,
-                    color = LocalContentColor.current,
-                    inlineContent = mapOf(
-                        "icon" to InlineTextContent(
-                            Placeholder(
-                                width = with(LocalDensity.current) { 24.dp.toPx().toSp() },
-                                height = with(LocalDensity.current) { 24.dp.toPx().toSp() },
-                                placeholderVerticalAlign = PlaceholderVerticalAlign.Center
-                            )
-                        ){
-                            Icon(painterResource(R.drawable.keyboard_gear), contentDescription = null)
-                        }
-                    ))
-            }
+                    Text(
+                        buildAnnotatedString {
+                            append(stringResource(R.string.size_settings_keyboard_modes_tip))
+                            append(" ")
+                            appendInlineContent("icon")
+                            appendLine()
+                            append(stringResource(R.string.size_settings_keyboard_modes_portrait_landscape_tip))
+                            appendLine()
+                            append(stringResource(R.string.size_settings_resize_tip))
+                        },
+                        style = Typography.Body.MediumMl,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        inlineContent = mapOf(
+                            "icon" to InlineTextContent(
+                                Placeholder(
+                                    width = with(LocalDensity.current) { 24.dp.toPx().toSp() },
+                                    height = with(LocalDensity.current) { 24.dp.toPx().toSp() },
+                                    placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+                                )
+                            ) {
+                                Icon(painterResource(R.drawable.keyboard_gear), contentDescription = null)
+                            }
+                        )
+                    )
+                }
 
-            Spacer(Modifier.height(8.dp))
-            ResizeMenuLite.render(showTitle = false)
+                Spacer(Modifier.height(8.dp))
+                ResizeMenuLite.render(showTitle = false)
 
             AndroidTextInput(allowPredictions = false, customOptions = setOf("org.futo.inputmethod.latin.ResizeMode"), autoshow = false)
         }

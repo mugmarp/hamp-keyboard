@@ -40,7 +40,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.futo.inputmethod.engine.general.UseExpandableSuggestionsForGeneralIME
 import org.futo.inputmethod.latin.BuildConfig
-import org.futo.inputmethod.latin.CrashLoggingApplication
 import org.futo.inputmethod.latin.R
 import org.futo.inputmethod.latin.SwipeDecoderDictionary
 import org.futo.inputmethod.latin.SwipeLanguageModelSetting
@@ -62,12 +61,12 @@ import org.futo.inputmethod.latin.uix.actions.BugViewerState
 import org.futo.inputmethod.latin.uix.actions.clipboard.clipboardFile
 import org.futo.inputmethod.latin.uix.findActivity
 import org.futo.inputmethod.latin.uix.getPreferencesDataStoreFile
-import org.futo.inputmethod.latin.uix.settings.NavigationItem
-import org.futo.inputmethod.latin.uix.settings.NavigationItemStyle
 import org.futo.inputmethod.latin.uix.settings.ScreenTitle
 import org.futo.inputmethod.latin.uix.settings.ScrollableList
 import org.futo.inputmethod.latin.uix.settings.SettingToggleDataStore
 import org.futo.inputmethod.latin.uix.settings.SettingToggleRaw
+import org.futo.inputmethod.latin.uix.settings.NavigationItem
+import org.futo.inputmethod.latin.uix.settings.NavigationItemStyle
 import org.futo.inputmethod.latin.uix.settings.useDataStore
 import org.futo.inputmethod.latin.uix.settings.useDataStoreValue
 import org.futo.inputmethod.latin.uix.theme.TonalPalette
@@ -78,8 +77,6 @@ import org.futo.inputmethod.latin.uix.theme.serialization.AlphaOrder
 import org.futo.inputmethod.latin.uix.theme.serialization.argbLongToHexColorString
 import org.futo.inputmethod.latin.uix.theme.serialization.long
 import org.futo.inputmethod.latin.xlm.AllowTransformerOnNonQWERTYLayouts
-import org.futo.inputmethod.updates.DISABLE_UPDATE_REMINDER
-import org.futo.inputmethod.updates.dismissedMigrateUpdateNotice
 import kotlin.system.exitProcess
 
 
@@ -201,23 +198,19 @@ fun DeveloperScreen(navController: NavHostController = rememberNavController()) 
     val scope = LocalLifecycleOwner.current
 
     ScrollableList {
-        ScreenTitle("Developer", showBack = true, navController)
+            ScreenTitle("Developer", showBack = true, navController)
 
-        SettingToggleDataStore(title = "Developer mode", setting = IS_DEVELOPER)
+            SettingToggleDataStore(title = "Developer mode", setting = IS_DEVELOPER)
 
-        CrashLoggingApplication.CopyLogsOption()
+            SettingToggleDataStore(
+                title = "Touch typing mode",
+                subtitle = "Hides all keys. Touch typists only! Recommended to disable emoji key and enable key borders",
+                setting = HiddenKeysSetting
+            )
 
-        SettingToggleDataStore(title = "Disable all update reminders", setting = DISABLE_UPDATE_REMINDER)
-        
-        SettingToggleDataStore(
-            title = "Touch typing mode",
-            subtitle = "Hides all keys. Touch typists only! Recommended to disable emoji key and enable key borders",
-            setting = HiddenKeysSetting
-        )
+            
 
-        SettingToggleDataStore(title = "Dismissed migration notice", setting = dismissedMigrateUpdateNotice)
-
-        SettingToggleDataStore(title = "Old action bar", setting = OldStyleActionsBar)
+            SettingToggleDataStore(title = "Old action bar", setting = OldStyleActionsBar)
 
         NavigationItem(
             title = "Text edit variations",
@@ -304,51 +297,7 @@ fun DeveloperScreen(navController: NavHostController = rememberNavController()) 
                 SwipeDecoderDictionary.debugLogUntil = System.currentTimeMillis() + 5L * 60L * 1000L
             }
         )
-
-        ScreenTitle(title = "Payment stuff")
-
-        SettingToggleDataStore(title = "Is paid", setting = IS_ALREADY_PAID)
-        SettingToggleDataStore(title = "Is payment pending", setting = IS_PAYMENT_PENDING)
-        SettingToggleDataStore(title = "Has seen paid notice", setting = HAS_SEEN_PAID_NOTICE)
-        SettingToggleDataStore(title = "Force show notice", setting = FORCE_SHOW_NOTICE)
-
-        val reminder = useDataStore(NOTICE_REMINDER_TIME)
-        val currTime = System.currentTimeMillis() / 1000L
-
-        val subtitleValue = if (reminder.value > currTime) {
-            val diffDays = (reminder.value - currTime) / 60.0 / 60.0 / 24.0
-            "Reminding in ${"%.2f".format(diffDays)} days"
-        } else {
-            "Reminder unset"
-        }
-        SettingToggleRaw(
-            "Reminder Time",
-            reminder.value > currTime,
-            {
-                if (!it) {
-                    reminder.setValue(0L)
-                }
-            },
-            subtitleValue,
-            reminder.value <= currTime,
-            { }
-        )
-
-        val licenseKey = useDataStore(EXT_LICENSE_KEY)
-        SettingToggleRaw(
-            "Ext License Key",
-            licenseKey.value != EXT_LICENSE_KEY.default,
-            {
-                if(!it) {
-                    licenseKey.setValue(EXT_LICENSE_KEY.default)
-                }
-            },
-            licenseKey.value,
-            licenseKey.value == EXT_LICENSE_KEY.default,
-            { }
-        )
-
-        ScreenTitle(title = "Here be dragons")
+                ScreenTitle(title = "Here be dragons")
         SettingToggleDataStore(
             "Use expandable suggestions UI for all languages",
             UseExpandableSuggestionsForGeneralIME,

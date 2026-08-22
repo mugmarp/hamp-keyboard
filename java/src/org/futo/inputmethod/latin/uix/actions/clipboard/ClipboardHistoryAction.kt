@@ -117,8 +117,6 @@ import org.futo.inputmethod.latin.uix.settings.SettingToggleRaw
 import org.futo.inputmethod.latin.uix.settings.UserSetting
 import org.futo.inputmethod.latin.uix.settings.UserSettingsMenu
 import org.futo.inputmethod.latin.uix.settings.pages.ParagraphText
-import org.futo.inputmethod.latin.uix.settings.pages.PaymentSurface
-import org.futo.inputmethod.latin.uix.settings.pages.PaymentSurfaceHeading
 import org.futo.inputmethod.latin.uix.settings.useDataStore
 import org.futo.inputmethod.latin.uix.settings.useDataStoreValue
 import org.futo.inputmethod.latin.uix.settings.userSettingToggleDataStore
@@ -1117,21 +1115,29 @@ val ClipboardHistoryAction = Action(
                 val clipboardHistory = useDataStore(ClipboardHistoryEnabled, blocking = true)
                 if(!unlocked) {
                     ScrollableList {
-                        PaymentSurface(isPrimary = true) {
-                            PaymentSurfaceHeading(title = stringResource(R.string.action_clipboard_manager_error_device_locked_title))
+                        Surface {
+                            Text(
+                                stringResource(R.string.action_clipboard_manager_error_device_locked_title),
+                                style = Typography.Heading.Medium
+                            )
 
                             ParagraphText(stringResource(R.string.action_clipboard_manager_error_device_locked_text))
                         }
                     }
                 } else if(clipboardHistoryManager.clipboardIOFailure.value) {
                     ScrollableList {
-                        PaymentSurface(isPrimary = true) {
-                            PaymentSurfaceHeading(title = stringResource(R.string.action_clipboard_manager_error_general_title))
+                        Surface {
+                            Text(
+                                stringResource(R.string.action_clipboard_manager_error_general_title),
+                                style = Typography.Heading.Medium
+                            )
+
                             ParagraphText(
                                 stringResource(
                                     R.string.action_clipboard_manager_error_general_text,
                                     clipboardHistoryManager.clipboardIOFailureReason
-                                ))
+                                )
+                            )
                             Button(onClick = {
                                 manager.activateAction(BugViewerAction)
                             }, modifier = Modifier.fillMaxWidth()) {
@@ -1165,8 +1171,12 @@ val ClipboardHistoryAction = Action(
                     }
                 } else if(!clipboardHistory.value) {
                     ScrollableList {
-                        PaymentSurface(isPrimary = true) {
-                            PaymentSurfaceHeading(title = stringResource(R.string.action_clipboard_manager_error_clipboard_history_disabled_title))
+                        Surface {
+                            Text(
+                                stringResource(R.string.action_clipboard_manager_error_clipboard_history_disabled_title),
+                                style = Typography.Heading.Medium
+                            )
+
                             ParagraphText(stringResource(R.string.action_clipboard_manager_error_clipboard_history_disabled_text_v2,
                                     context.getSetting(ClipboardHistoryItemsToKeep),
                                     (context.getSetting(ClipboardHistoryTimeToKeep) / 24.0f).roundToInt()

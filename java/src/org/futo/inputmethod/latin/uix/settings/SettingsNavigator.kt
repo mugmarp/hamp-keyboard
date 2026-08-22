@@ -23,7 +23,6 @@ import org.futo.inputmethod.latin.uix.actions.AllActions
 import org.futo.inputmethod.latin.uix.settings.pages.ActionEditorScreen
 import org.futo.inputmethod.latin.uix.settings.pages.ActionsScreen
 import org.futo.inputmethod.latin.uix.settings.pages.AdvancedParametersScreen
-import org.futo.inputmethod.latin.uix.settings.pages.AlreadyPaidDialog
 import org.futo.inputmethod.latin.uix.settings.pages.BlacklistScreen
 import org.futo.inputmethod.latin.uix.settings.pages.BlacklistScreenLite
 import org.futo.inputmethod.latin.uix.settings.pages.CreditsScreen
@@ -47,8 +46,6 @@ import org.futo.inputmethod.latin.uix.settings.pages.LanguagesScreen
 import org.futo.inputmethod.latin.uix.settings.pages.LongPressMenu
 import org.futo.inputmethod.latin.uix.settings.pages.MiscMenu
 import org.futo.inputmethod.latin.uix.settings.pages.NumberRowSettingMenu
-import org.futo.inputmethod.latin.uix.settings.pages.PaymentScreen
-import org.futo.inputmethod.latin.uix.settings.pages.PaymentThankYouScreen
 import org.futo.inputmethod.latin.uix.settings.pages.PredictiveTextMenu
 import org.futo.inputmethod.latin.uix.settings.pages.ProjectInfoView
 import org.futo.inputmethod.latin.uix.settings.pages.ResizeMenuLite
@@ -181,20 +178,9 @@ fun SettingsNavigator(
             composable("dynamicpalette") { DevPaletteScreen(navController) }
             composable("devkeyboard") { DevKeyboardScreen(navController) }
             composable("blacklist") { BlacklistScreen(navController) }
-            composable("payment") { PaymentScreen(navController) { navController.navigateUp() } }
-            composable("paid") { PaymentThankYouScreen { navController.navigateUp() } }
             composable("credits") { CreditsScreen(navController) }
             composable("exportingcfg") { ExportingMenu(navController) }
             composable("kasroz") { KASROZMenu() }
-            dialog("update") {
-                UpdateDialog(navController = navController)
-            }
-            dialog("alreadyPaid") {
-                AlreadyPaidDialog(navController = navController)
-            }
-            dialog("customThemeDialog") {
-                CustomThemeDialog(navController = navController)
-            }
             addModelManagerNavigation(navController)
         }
     }
