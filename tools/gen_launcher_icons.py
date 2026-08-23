@@ -45,8 +45,32 @@ SRC_SHA256 = "96f3008ce48931f08f141aaf5139f8a6570be66d8daff93f442fbe7f8df9a3a0"
 OUT_BASE = "java/res"
 
 NAVY_TOLERANCE = 55             # how close to navy counts as background
-CONTENT_SCALE_ADAPTIVE = 0.60   # inside the 66dp/108dp safe zone (0.611)
-CONTENT_SCALE_LEGACY = 0.72     # optical fit inside the squircle plate
+
+# ---------------------------------------------------------------------------
+# CONTENT SCALE - derived from geometry, not chosen by eye.
+#
+# The 66dp safe zone of a 108dp adaptive layer is a "will not be clipped"
+# guarantee, NOT a design target. Only about 72dp of the 108dp canvas is ever
+# VISIBLE after a launcher applies its mask, so content that fills the 66dp safe
+# zone spans 66/72 = 91.7% of the visible icon: unclipped, but visually
+# edge-to-edge with no breathing room. Treating the safe zone as the target is
+# what made the artwork look oversized.
+#
+# APP_LOGO.jpg places its artwork at 63.4% of its own full-bleed square (measured:
+# 649x519 content on 1024x1024, margins 17-25%). To reproduce that same visual
+# proportion inside the VISIBLE area of an adaptive icon:
+#
+#     0.634 x (72 / 108) = 0.4225
+#
+# The legacy icon has no outer mask crop - the whole rounded square is visible -
+# so it uses the source ratio directly and reproduces APP_LOGO.jpg's proportions
+# one to one.
+# ---------------------------------------------------------------------------
+VISIBLE_FRACTION = 72.0 / 108.0     # of the adaptive canvas a launcher shows
+SOURCE_CONTENT_RATIO = 0.634        # measured from APP_LOGO.jpg
+CONTENT_SCALE_ADAPTIVE = SOURCE_CONTENT_RATIO * VISIBLE_FRACTION   # ~0.42
+CONTENT_SCALE_LEGACY = SOURCE_CONTENT_RATIO                        # ~0.63
+
 SQUIRCLE_RADIUS = 0.225         # Android's rounded-square convention
 INK_FRACTION = 0.02             # row/col must carry >2% of peak ink to count
 ALPHA_FLOOR = 3                 # alpha at or below this is clamped to 0
@@ -171,6 +195,34 @@ def apply_shape(img, mask):
     return Image.merge("RGBA", (r, g, b, Image.fromarray(arr, "L")))
 
 
+def build_legacy(size, content, navy, kind):
+    """Legacy launcher icon: navy plate FIRST, then content, then re-mask.
+
+    Order matters. Compositing content onto a full-bleed navy square and masking
+    afterwards works, but building the masked plate first and re-applying the same
+    mask at the end guarantees the plate is genuinely present everywhere inside the
+    shape and that nothing survives outside it - even if the content were ever
+    scaled large enough to overhang the rounded edge. This is what stops the white
+    glyphs appearing to float on the launcher background with no plate behind them.
+    """
+    mask = shape(size, kind)
+
+    # 1. Solid navy rounded plate.
+    plate = Image.new("RGBA", (size, size), (*navy, 255))
+    plate.putalpha(mask)
+    out = Image.alpha_composite(Image.new("RGBA", (size, size), (0, 0, 0, 0)), plate)
+
+    # 2. White content on top of the plate, centred, at source proportions.
+    art = compose(size, content, CONTENT_SCALE_LEGACY)
+    out.alpha_composite(art)
+
+    # 3. Re-apply the mask so nothing at all survives outside the shape.
+    r, g, b, a = out.split()
+    arr = np.array(ImageChops.multiply(a, mask))
+    arr[arr <= ALPHA_FLOOR] = 0
+    return Image.merge("RGBA", (r, g, b, Image.fromarray(arr, "L")))
+
+
 def main():
     src = assert_source()
     navy = detect_navy(src)
@@ -200,12 +252,14 @@ def main():
             bg.save(f"{d}/ic_launcher_background.png")
             fg.save(f"{d}/ic_launcher_foreground.png")
 
-        # --- LEGACY: navy plate + content, then masked to shape ---
-        plate = compose(size, content, CONTENT_SCALE_LEGACY, plate=(*navy, 255))
-        apply_shape(plate, shape(size, "squircle")).save(f"{mm}/ic_launcher.png")
-        apply_shape(plate, shape(size, "circle")).save(f"{mm}/ic_launcher_round.png")
+        # --- LEGACY: navy plate first, then content, then re-mask ---
+        build_legacy(size, content, navy, "squircle").save(f"{mm}/ic_launcher.png")
+        build_legacy(size, content, navy, "circle").save(f"{mm}/ic_launcher_round.png")
 
-        print(f"  {dpi:8s} adaptive={adaptive:3d}px legacy={size:3d}px")
+        vis = adaptive * VISIBLE_FRACTION
+        cw = adaptive * CONTENT_SCALE_ADAPTIVE
+        print(f"  {dpi:8s} adaptive={adaptive:3d}px legacy={size:3d}px "
+              f"content={cw:.0f}px = {cw/vis*100:.0f}% of visible area")
 
     print("\ndone")
 
