@@ -2,8 +2,8 @@
 
 Hamp Keyboard is a fork of the [FUTO Keyboard](https://github.com/futo-org/android-keyboard) (itself a fork of [LatinIME, The Android Open-Source Keyboard](https://android.googlesource.com/platform/packages/inputmethods/LatinIME)), customized to install side-by-side with the official FUTO Keyboard app.
 
-- **Package name:** `org.futo.inputmethod.latin.hamp`
 - **Display name:** Hamp Keyboard
+- **Application ID:** `org.futo.inputmethod.latin.hamp` — inherited from the upstream package with a `.hamp` suffix so Hamp installs alongside the official FUTO Keyboard instead of replacing it. This is provisional and may be renamed to an independent namespace in a future major version; because an application ID is the IME's identity to Android, such a rename would require re-enabling the keyboard in system settings, so it is deliberately deferred.
 - All previously external dependencies (layouts, themes, dictionaries, translations, swipe models, AARs) are vendored directly into this repository — no submodules or GitLab access required.
 
 ## Why Hamp Keyboard exists — what it adds over FUTO Keyboard
@@ -29,10 +29,22 @@ Additional differences from upstream:
 
 - **UI glitch during frame transitions**: there is a known rendering issue where frames transition incorrectly (visual flicker/artifacts when switching between keyboard views/screens). The app is otherwise stable and functional. This is tracked as a known cosmetic issue pending investigation.
 
+## Install
+
+Download the APK from the [latest release](https://github.com/mugmarp/hamp-keyboard/releases/latest), install it, then enable **Hamp Keyboard** in Android's *Settings → System → Languages & input → On-screen keyboard*.
+
+Release builds are currently signed with a debug key, so Android will warn about installing from an unknown source. Hamp installs alongside FUTO Keyboard — enabling one does not remove the other.
+
 ## Changelog
 
-### 1.0.0 (1)
-- Renamed app to "Hamp Keyboard" with applicationId `org.futo.inputmethod.latin.hamp` for side-by-side installation with FUTO Keyboard.
+### 1.1.0
+- **Charcoal & Ember design system** as the default theme: dark-first OKLCH-derived palette with a matching light variant, bundled Space Grotesk + DM Sans typography, circular icon tiles.
+- **Grouped settings**: home screen rows collected into rounded cards (Typing / Personalize / Other) with hairline dividers.
+- **New launcher icon** generated from the Hamp artwork, with a correct adaptive-icon layer split (solid plate background, content-only foreground) and self-contained legacy icons.
+- **Help & Feedback** retargeted to this repository and its maintainer; FUTO website, Discord, and Zulip links removed.
+
+### 1.0.0
+- Renamed app to "Hamp Keyboard" with application ID `org.futo.inputmethod.latin.hamp` for side-by-side installation with FUTO Keyboard.
 - Removed FUTO-specific payment, update checking, and crash reporting systems.
 - Fixed crash on startup caused by manifest references to removed classes (`CrashLoggingApplication`, `PaymentCompleteActivity`).
 - Vendored all submodule dependencies into the repository.
@@ -42,7 +54,7 @@ Additional differences from upstream:
 
 No recursive clone needed — everything is in this repository:
 ```
-git clone https://github.com/mugmarp/HAMP_KEYBOARD.git
+git clone https://github.com/mugmarp/hamp-keyboard.git
 ```
 
 You can then open the project in Android Studio and build it that way, or use gradle commands:
@@ -50,6 +62,21 @@ You can then open the project in Android Studio and build it that way, or use gr
 ./gradlew assembleStableDebug
 ./gradlew assembleStableRelease
 ```
+
+`VERSION_CODE` and `VERSION_NAME` are read from the environment; the build fails with
+`versionCode is set to -1` if they are unset, so pass them explicitly:
+```
+VERSION_CODE=7 VERSION_NAME=1.1.0 ./gradlew assembleStableDebug
+```
+
+Launcher icons are generated, not hand-edited — regenerate them with
+`python3 tools/gen_launcher_icons.py` after changing the source artwork.
+
+## Merging upstream changes
+
+See [MERGE_WORKFLOW.md](MERGE_WORKFLOW.md). Hamp carries customizations that an
+upstream merge can silently revert, so that document lists the protected paths and
+the post-merge verification steps.
 
 ## Credits
 

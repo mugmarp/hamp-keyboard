@@ -30,20 +30,48 @@ These files contain HAMP-specific customizations that must be preserved:
 | `java/src/org/futo/inputmethod/engine/general/ActionInputTransactionIME.kt` | `onMovePointerVertical` implementation |
 | `java/src/org/futo/inputmethod/latin/LatinIMELegacy.java` | `onMovePointerVertical` wiring |
 
-### Branding & Icons
-| File | Purpose |
+### Branding, Theme & Icons
+| File / path | Purpose |
 |------|---------|
-| `java/res/values/ic_launcher_background.xml` | Background color `#1A1F2E` |
-| `java/unstable/res/values/ic_launcher_background.xml` | Background color `#1A1F2E` |
-| `java/res/mipmap-anydpi-v26/ic_launcher.xml` | Adaptive icon config |
+| `java/res/mipmap-anydpi-v26/ic_launcher.xml` | Adaptive icon config (references `@drawable/`, not `@color/`) |
 | `java/res/mipmap-anydpi-v26/ic_launcher_round.xml` | Round adaptive icon config |
 | `java/unstable/res/mipmap-anydpi-v26/ic_launcher.xml` | Unstable adaptive icon config |
 | `java/unstable/res/mipmap-anydpi-v26/ic_launcher_round.xml` | Unstable round adaptive icon config |
-| `java/res/drawable/ic_launcher_foreground.png` | PNG foreground (stable) |
-| `java/unstable/res/drawable/ic_launcher_foreground.png` | PNG foreground (unstable) |
+| `java/res/drawable-*/ic_launcher_background.png` | Per-density solid plate (5 files) |
+| `java/res/drawable-*/ic_launcher_foreground.png` | Per-density content-only foreground (5 files) |
+| `java/res/drawable/ic_launcher_foreground.png` | Density-independent foreground fallback |
+| `java/res/mipmap-*/ic_launcher.png` | Self-contained legacy squircle icons (5 files) |
+| `java/res/mipmap-*/ic_launcher_round.png` | Self-contained legacy circle icons (5 files) |
+| `tools/gen_launcher_icons.py` | Icon generator — regenerates all of the above from source artwork |
 | `java/res/values/strings-appname.xml` | App name "Hamp Keyboard" |
 | `java/unstable/res/values/strings-appname.xml` | App name "Hamp Keyboard [Dev Build]" |
+| `java/res/values/strings-uix.xml` | Theme names, section labels, de-FUTO'd help strings |
+| `java/src/org/futo/inputmethod/latin/uix/theme/presets/CharcoalEmber.kt` | Charcoal & Ember palette (dark + light) |
+| `java/src/org/futo/inputmethod/latin/uix/theme/ThemeOptions.kt` | Preset registration; Charcoal & Ember is the default |
+| `java/src/org/futo/inputmethod/latin/uix/theme/Type.kt` | Bundled font families, `SectionLabel` style |
+| `java/src/org/futo/inputmethod/latin/uix/settings/Components.kt` | `HampSection` grouped cards, icon tiles |
+| `java/src/org/futo/inputmethod/latin/uix/settings/pages/Home.kt` | Grouped settings layout |
+| `java/src/org/futo/inputmethod/latin/uix/settings/pages/Help.kt` | De-FUTO'd links and maintainer email |
+| `java/src/org/futo/inputmethod/latin/uix/settings/pages/CommonComponents.kt` | Material3 replacements for removed FUTO components |
+| `java/res/font/*.ttf` | Bundled Space Grotesk + DM Sans |
+| `java/res/raw/licenses/ofl_*.txt` | Font licences (must ship with the fonts) |
+| `java/AndroidManifest.xml` | Removed `CrashLoggingApplication` / `PaymentCompleteActivity` refs |
 | `build.gradle` | Application ID `org.futo.inputmethod.latin.hamp` |
+| `README.md`, `MERGE_WORKFLOW.md` | Hamp documentation |
+
+> **Removed upstream files.** Upstream still has FUTO payment, update-checking and
+> crash-reporting code that Hamp deleted (`latin/payment/`, `updates/`,
+> `CrashLoggingApplication.kt`, `settings/pages/Payment.kt`, `UpdateScreen.kt`,
+> `strings-payment-app.xml` and its translations). A merge will try to
+> **reintroduce** them. Delete them again rather than resolving their conflicts,
+> then confirm no manifest entry or navigation route references the deleted
+> classes — a dangling `android:name` crashes the app on launch with
+> `ClassNotFoundException`, which is exactly how that bug reached a build before.
+
+> **Deleted protected entries.** `java/res/values/ic_launcher_background.xml` and
+> its unstable counterpart were removed when the icon moved to per-density
+> background PNGs. Do not re-add them: two sources for
+> `drawable/ic_launcher_background` is a duplicate-resource build failure.
 
 ## Merge Workflow
 
@@ -104,7 +132,8 @@ else
     echo "$CONFLICTS"
     echo ""
     
-    # For each protected file, restore our version
+    # For each protected file, restore our version.
+    # Glob patterns are expanded so generated icon sets are covered as a group.
     PROTECTED_FILES=(
         "java/src/org/futo/inputmethod/latin/InputAttributes.java"
         "java/src/org/futo/inputmethod/latin/inputlogic/InputLogic.java"
@@ -116,21 +145,47 @@ else
         "java/src/org/futo/inputmethod/engine/general/JapaneseIME.kt"
         "java/src/org/futo/inputmethod/engine/general/ActionInputTransactionIME.kt"
         "java/src/org/futo/inputmethod/latin/LatinIMELegacy.java"
-        "java/res/values/ic_launcher_background.xml"
-        "java/unstable/res/values/ic_launcher_background.xml"
+        "java/AndroidManifest.xml"
         "java/res/mipmap-anydpi-v26/ic_launcher.xml"
         "java/res/mipmap-anydpi-v26/ic_launcher_round.xml"
         "java/unstable/res/mipmap-anydpi-v26/ic_launcher.xml"
         "java/unstable/res/mipmap-anydpi-v26/ic_launcher_round.xml"
         "java/res/values/strings-appname.xml"
         "java/unstable/res/values/strings-appname.xml"
+        "java/res/values/strings-uix.xml"
+        "java/src/org/futo/inputmethod/latin/uix/theme/presets/CharcoalEmber.kt"
+        "java/src/org/futo/inputmethod/latin/uix/theme/ThemeOptions.kt"
+        "java/src/org/futo/inputmethod/latin/uix/theme/Type.kt"
+        "java/src/org/futo/inputmethod/latin/uix/settings/Components.kt"
+        "java/src/org/futo/inputmethod/latin/uix/settings/pages/Home.kt"
+        "java/src/org/futo/inputmethod/latin/uix/settings/pages/Help.kt"
+        "java/src/org/futo/inputmethod/latin/uix/settings/pages/CommonComponents.kt"
+        "tools/gen_launcher_icons.py"
         "build.gradle"
+        "README.md"
+        "MERGE_WORKFLOW.md"
     )
+    # Generated / bulk assets, protected as glob groups.
+    PROTECTED_GLOBS=(
+        "java/res/drawable/ic_launcher_foreground.png"
+        "java/res/drawable-*/ic_launcher_background.png"
+        "java/res/drawable-*/ic_launcher_foreground.png"
+        "java/res/mipmap-*/ic_launcher.png"
+        "java/res/mipmap-*/ic_launcher_round.png"
+        "java/res/font/*.ttf"
+        "java/res/raw/licenses/ofl_*.txt"
+    )
+    for g in "${PROTECTED_GLOBS[@]}"; do
+        for f in $g; do
+            [ -e "$f" ] && PROTECTED_FILES+=("$f")
+        done
+    done
     
     for file in "${PROTECTED_FILES[@]}"; do
         if git diff --name-only --diff-filter=U | grep -q "^$file$"; then
             echo "Restoring protected file: $file"
             git checkout HEAD -- "$file"
+            git add "$file"
         fi
     done
     
@@ -150,7 +205,7 @@ fi
 # 6. Build test
 echo ""
 echo "Testing build..."
-VERSION_CODE=1 VERSION_NAME=1.0.0 ./gradlew assembleStableDebug --no-daemon
+VERSION_CODE=99 VERSION_NAME=merge-test ./gradlew assembleStableDebug --no-daemon
 
 if [ $? -eq 0 ]; then
     echo ""
@@ -188,14 +243,16 @@ git add <file>
 git commit -m "Merge upstream/master: resolve conflicts"
 
 # 5. Continue build test
-VERSION_CODE=1 VERSION_NAME=1.0.0 ./gradlew assembleStableDebug --no-daemon
+VERSION_CODE=99 VERSION_NAME=merge-test ./gradlew assembleStableDebug --no-daemon
 ```
 
 ## Post-Merge Checklist
 
 After successful merge and build:
 
-- [ ] Run full verification: `./verify-all.sh` (or run the verification script)
+- [ ] Regenerate + verify launcher icons: `python3 tools/gen_launcher_icons.py`,
+      then unzip the built APK and confirm the icon layers survived the merge
+      (an upstream `res/` change can silently restore FUTO artwork)
 - [ ] Test vertical swipe in Termius, Termux, and normal text fields
 - [ ] Test horizontal swipe
 - [ ] Test app icon appears correctly (stable + unstable)
