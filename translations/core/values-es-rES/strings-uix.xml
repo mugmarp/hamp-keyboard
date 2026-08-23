@@ -538,10 +538,6 @@
   <string name="help_menu_website_tags">descargas, aplicaciones, escritura por voz</string>
   <string name="help_menu_documentation">Documentación</string>
   <string name="help_menu_documentation_subtitle">Aprenda más sobre las características y capacidades del teclado</string>
-  <string name="help_menu_discord">Servidor de Discord</string>
-  <string name="help_menu_discord_subtitle">¿Le gustaría hablar pero no le gusta Zulllip? Chatee aquí</string>
-  <string name="help_menu_futo_chat">FUTO chat (Zulip)</string>
-  <string name="help_menu_futo_chat_subtitle">¿Le gustaría hablar pero no le gusta Discord? Chatee aquí</string>
   <string name="help_menu_github">Registro público de incidencias (Github)</string>
   <string name="help_menu_github_subtitle">¿Algún fallo o sugerencia? Escriba aquí</string>
   <string name="help_menu_email">Correo electrónico a keyboard@futo.org</string>

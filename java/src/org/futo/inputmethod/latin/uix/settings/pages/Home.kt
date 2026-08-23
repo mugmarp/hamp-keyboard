@@ -34,6 +34,8 @@ import org.futo.inputmethod.latin.R
 import org.futo.inputmethod.latin.uix.LocalNavController
 import org.futo.inputmethod.latin.uix.TextEditPopupActivity
 import org.futo.inputmethod.latin.uix.USE_SYSTEM_VOICE_INPUT
+import org.futo.inputmethod.latin.uix.settings.HampSection
+import org.futo.inputmethod.latin.uix.settings.HampSectionDivider
 import org.futo.inputmethod.latin.uix.settings.NavigationItem
 import org.futo.inputmethod.latin.uix.settings.NavigationItemStyle
 import org.futo.inputmethod.latin.uix.settings.UserSetting
@@ -47,6 +49,7 @@ val HomeScreenLite = UserSettingsMenu(
     title = R.string.settings_home_title,
     navPath = "home", registerNavPath = false,
     settings = listOf(
+        // ---- TYPING group (rendered as one HampSection card in HomeScreen) ----
         userSettingNavigationItem(
             title = R.string.language_settings_title,
             style = NavigationItemStyle.HomePrimary,
@@ -97,6 +100,7 @@ val HomeScreenLite = UserSettingsMenu(
             icon = R.drawable.smile
         ),
 
+        // ---- PERSONALIZE group ----
         userSettingNavigationItem(
             title = R.string.theme_settings_title,
             style = NavigationItemStyle.HomeTertiary,
@@ -104,6 +108,7 @@ val HomeScreenLite = UserSettingsMenu(
             icon = R.drawable.themes
         ),
 
+        // ---- OTHER group ----
         userSettingNavigationItem(
             title = R.string.help_menu_title,
             style = NavigationItemStyle.HomeSecondary,
@@ -156,7 +161,27 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                 }
             }
 
-            HomeScreenLite.render(showTitle = false)
+            // Charcoal & Ember grouped-card layout (modern-ui-vision Section primitive).
+            // Each group renders its rows inside one rounded surface card with hairline
+            // dividers between them. Rows come from the shared HomeScreenLite menu list,
+            // sliced by index so visibility logic in each UserSetting is preserved.
+            @Composable fun renderRows(from: Int, until: Int) {
+                val visible = HomeScreenLite.settings.filter { it.visibilityCheck?.invoke() != false }
+                visible.drop(from).take(until - from).forEachIndexed { i, setting ->
+                    if(i > 0) HampSectionDivider()
+                    setting.component()
+                }
+            }
+
+            HampSection(label = stringResource(R.string.hamp_section_typing)) {
+                renderRows(0, 5)
+            }
+            HampSection(label = stringResource(R.string.hamp_section_personalize)) {
+                renderRows(5, 7)
+            }
+            HampSection(label = stringResource(R.string.hamp_section_other)) {
+                renderRows(7, 10)
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 

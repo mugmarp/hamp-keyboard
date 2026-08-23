@@ -506,10 +506,6 @@
   <string name="help_menu_website_tags">download, apps, voice input, ダウンロード, アプリ, 音声入力</string>
   <string name="help_menu_documentation">ドキュメンテーション</string>
   <string name="help_menu_documentation_subtitle">キーボードの機能や性能について詳しく知る</string>
-  <string name="help_menu_discord">Discord サーバー</string>
-  <string name="help_menu_discord_subtitle">話したいけど Zulip は苦手？ ならこっちでチャットしよう</string>
-  <string name="help_menu_futo_chat">FUTO チャット (Zulip)</string>
-  <string name="help_menu_futo_chat_subtitle">話したいけど Discord は苦手？ ならこっちでチャットしよう</string>
   <string name="help_menu_github">公開イシュートラッカー (GitHub)</string>
   <string name="help_menu_github_subtitle">不具合やバグ報告、新機能の要望などはこちらに投稿してください</string>
   <string name="help_menu_email">keyboard@futo.org 宛にメールを送る</string>

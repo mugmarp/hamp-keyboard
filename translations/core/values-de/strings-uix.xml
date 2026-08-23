@@ -506,10 +506,6 @@
   <string name="help_menu_website_tags">Download, APPs, Spracheingabe</string>
   <string name="help_menu_documentation">Dokumentation</string>
   <string name="help_menu_documentation_subtitle">Erfahren Sie mehr über die Funktionen und Möglichkeiten der Tastatur</string>
-  <string name="help_menu_discord">Discord-Server</string>
-  <string name="help_menu_discord_subtitle">Möchten Sie reden, aber mögen kein Zulip? Chatten Sie hier</string>
-  <string name="help_menu_futo_chat">FUTO-Chat (Zulip)</string>
-  <string name="help_menu_futo_chat_subtitle">Möchten Sie Chatten, aber mögen Discord nicht? Chatten Sie hier</string>
   <string name="help_menu_github">Öffentlicher Bugtracker (GitHub)</string>
   <string name="help_menu_github_subtitle">Spezifischer Fehler oder Funktionsanfrage? Hier posten</string>
   <string name="help_menu_email">E-Mail an keyboard@futo.org</string>

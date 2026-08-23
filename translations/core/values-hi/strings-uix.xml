@@ -402,10 +402,6 @@
     <string name="help_menu_version_tip">हम आपकी राय सुनना चाहते हैं! यदि आप कोई समस्या रिपोर्ट कर रहे हैं, तो आपका संस्करण प्रासंगिक हो सकता है: v%1$s</string>
     <string name="help_menu_documentation">दस्तावेज़ीकरण</string>
     <string name="help_menu_documentation_subtitle">कीबोर्ड की विशेषताओं और क्षमताओं के बारे में अधिक जानें</string>
-    <string name="help_menu_discord">डिस्कॉर्ड सर्वर</string>
-    <string name="help_menu_discord_subtitle">बात करना चाहते हैं लेकिन ज़ुलिप पसंद नहीं है? यहाँ चैट करें</string>
-    <string name="help_menu_futo_chat">FUTO चैट</string>
-    <string name="help_menu_futo_chat_subtitle">बात करना चाहते हैं लेकिन डिस्कॉर्ड पसंद नहीं है? यहाँ चैट करें</string>
     <string name="help_menu_github">सार्वजनिक समस्या ट्रैकर</string>
     <string name="help_menu_github_subtitle">विशिष्ट बग या फीचर अनुरोध? यहाँ पोस्ट करें</string>
     <string name="help_menu_email">ईमेल करें keyboard@futo.org</string>

@@ -538,10 +538,6 @@
   <string name="help_menu_website_tags">завантаження, застосунок, голосовий ввід</string>
   <string name="help_menu_documentation">Документація</string>
   <string name="help_menu_documentation_subtitle">Дізнайтеся більше про функції та можливості клавіатури</string>
-  <string name="help_menu_discord">Сервер Discord</string>
-  <string name="help_menu_discord_subtitle">Хочете поговорити, але не любите Zulip? Чат тут</string>
-  <string name="help_menu_futo_chat">Чат FUTO</string>
-  <string name="help_menu_futo_chat_subtitle">Хочете поговорити, але не любите Discord? Чат тут</string>
   <string name="help_menu_github">Публічний трекер проблем</string>
   <string name="help_menu_github_subtitle">Конкретна помилка або запит на функцію? Напишіть тут</string>
   <string name="help_menu_email">Поштова адреса: keyboard@futo.org</string>

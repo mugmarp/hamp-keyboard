@@ -530,10 +530,6 @@
   <string name="help_menu_website_tags">pobieranie, aplikacje, wpisywanie głosowe</string>
   <string name="help_menu_documentation">Dokumentacja</string>
   <string name="help_menu_documentation_subtitle">Dowiedz się więcej o funkcjach i możliwościach klawiatury</string>
-  <string name="help_menu_discord">Serwer Discord</string>
-  <string name="help_menu_discord_subtitle">Chcesz porozmawiać, ale nie lubisz Zulip? Czatuj tutaj</string>
-  <string name="help_menu_futo_chat">Czat FUTO</string>
-  <string name="help_menu_futo_chat_subtitle">Chcesz porozmawiać, ale nie lubisz Discord? Czatuj tutaj</string>
   <string name="help_menu_github">Publiczny tracker problemów</string>
   <string name="help_menu_github_subtitle">Specyficzny błąd lub prośba o funkcję? Opublikuj tutaj</string>
   <string name="help_menu_email">Wyślij e-mail na keyboard@futo.org</string>

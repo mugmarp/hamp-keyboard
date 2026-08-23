@@ -356,10 +356,6 @@
   <string name="help_menu_version_tip">의견을 듣고 싶습니다! 문제를 보고하는 경우, 귀하의 버전이 관련이 있을 수 있습니다: v%1$s</string>
   <string name="help_menu_documentation">문서</string>
   <string name="help_menu_documentation_subtitle">키보드의 기능과 능력에 대해 더 알아보세요</string>
-  <string name="help_menu_discord">디스코드 서버</string>
-  <string name="help_menu_discord_subtitle">대화하고 싶지만 Zulip이 마음에 들지 않나요? 여기서 채팅하세요</string>
-  <string name="help_menu_futo_chat">FUTO 채팅</string>
-  <string name="help_menu_futo_chat_subtitle">대화하고 싶지만 디스코드가 마음에 들지 않나요? 여기서 채팅하세요</string>
   <string name="help_menu_github">공식 이슈 트래커</string>
   <string name="help_menu_github_subtitle">특정 버그나 기능 요청이 있나요? 여기서 게시하세요</string>
   <string name="help_menu_email">keyboard@futo.org로 이메일 보내기</string>

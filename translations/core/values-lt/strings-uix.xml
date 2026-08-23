@@ -582,10 +582,6 @@
   <string name="help_menu_website_tags">parsisiųsti, programėlės, balso įvestis</string>
   <string name="help_menu_documentation">Dokumentacija</string>
   <string name="help_menu_documentation_subtitle">Sužinokite daugiau apie klaviatūros funkcijas ir galimybes</string>
-  <string name="help_menu_discord">Discord serveris</string>
-  <string name="help_menu_discord_subtitle">Norite pasikalbėti, bet nemėgstate Zulip? Kalbėkite čia</string>
-  <string name="help_menu_futo_chat">FUTO pokalbis</string>
-  <string name="help_menu_futo_chat_subtitle">Norite pasikalbėti, bet nemėgstate Discord? Kalbėkite čia</string>
   <string name="help_menu_github">Viešas problemų sekimo įrankis</string>
   <string name="help_menu_github_subtitle">Specifinė klaida ar funkcijos prašymas? Paskelbkite čia</string>
   <string name="help_menu_email">El. paštas: keyboard@futo.org</string>

@@ -6,6 +6,25 @@ Hamp Keyboard is a fork of the [FUTO Keyboard](https://github.com/futo-org/andro
 - **Display name:** Hamp Keyboard
 - All previously external dependencies (layouts, themes, dictionaries, translations, swipe models, AARs) are vendored directly into this repository — no submodules or GitLab access required.
 
+## Why Hamp Keyboard exists — what it adds over FUTO Keyboard
+
+Hamp's core flexibility upgrade: **the spacebar itself becomes a cursor-control surface.**
+
+Traditional keyboards (including upstream FUTO Keyboard) reserve a dedicated **arrow-key row** for cursor movement. That row costs vertical space on every keyboard view and forces your thumb to travel to the layout's edge for every small adjustment.
+
+Hamp keeps those arrow keys available — they're a standard toggle in Keyboard & Typing ("Show Arrow Keys", off by default) — but adds something upstream lacks: **all-direction swiping directly on the spacebar**, enabled out of the box:
+
+- **Swipe left/right on the spacebar** moves the cursor character-by-character; combined with Hamp's fixes it works consistently across all apps and text fields, including terminals like Termius where cursor handling previously misbehaved.
+- **You choose your setup**: keep the arrow row if you prefer classic navigation, hide it for a cleaner one-row-shorter keyboard with bigger keys, or use both — the spacebar swipe and the arrow row are fully independent settings.
+- The spacebar swipe mode is configurable (cursor movement / language switching / off) under Keyboard & Typing → Spacebar.
+
+The result is optionality upstream doesn't offer: users who never touch arrow keys get a cleaner keyboard with larger keys by default; users who want them can flip them back on at any time. No functionality was taken away — flexibility was added.
+
+Additional differences from upstream:
+
+- **Charcoal & Ember design system**: dark-first "Charcoal & Ember" theme as the default, with grouped/rounded settings cards, bundled Space Grotesk + DM Sans typography, circular icon tiles, and a matching light variant.
+- **Independent project hygiene**: no FUTO payment, update-checking, crash reporting, or chat links; help & feedback points to this repository and its maintainer.
+
 ## Known issues
 
 - **UI glitch during frame transitions**: there is a known rendering issue where frames transition incorrectly (visual flicker/artifacts when switching between keyboard views/screens). The app is otherwise stable and functional. This is tracked as a known cosmetic issue pending investigation.

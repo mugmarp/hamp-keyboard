@@ -442,10 +442,6 @@
   <string name="help_menu_title">Pomoc a zpětná vazba</string>
   <string name="help_menu_website">Webová stránka FUTO</string>
   <string name="help_menu_documentation">Dokumentace</string>
-  <string name="help_menu_discord">Discord server</string>
-  <string name="help_menu_discord_subtitle">Chcete si povídat, ale nemáte rádi Zulip? Chatujte zde</string>
-  <string name="help_menu_futo_chat">Chat FUTO (Zulip)</string>
-  <string name="help_menu_futo_chat_subtitle">Chcete si povídat, ale nemáte rádi Discord? Chatujte zde</string>
   <string name="help_menu_github">Veřejný systém řízení požadavků (GitHub)</string>
   <string name="help_menu_github_subtitle">Určitý problém nebo požadavek? Zveřejněte ho zde</string>
   <string name="help_menu_email">Zašlete e-mail na adresu keyboard@futo.org</string>

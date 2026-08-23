@@ -488,10 +488,6 @@
   <string name="help_menu_website_tags">download, app, input vocale</string>
   <string name="help_menu_documentation">Documentazione</string>
   <string name="help_menu_documentation_subtitle">Scopri di più sulle caratteristiche e le capacità della tastiera</string>
-  <string name="help_menu_discord">Server Discord</string>
-  <string name="help_menu_discord_subtitle">Vuoi parlare ma non ti piace Zulip? Chatta qui</string>
-  <string name="help_menu_futo_chat">Chat di FUTO (Zulip)</string>
-  <string name="help_menu_futo_chat_subtitle">Vuoi parlare ma non ti piace Discord? Chatta qui</string>
   <string name="help_menu_github_subtitle">Hai una richiesta specifica su un bug o una funzionalità? Pubblica qui</string>
   <string name="help_menu_email">Email keyboard@futo.org</string>
   <string name="help_menu_email_subtitle">Feedback privato, aiuto o non usi GitHub? Scrivici un\'e-mail</string>

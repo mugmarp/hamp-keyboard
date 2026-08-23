@@ -327,7 +327,6 @@
   <string name="help_menu_version_tip">Tahame kuulda tagasisidet! Kui teatad probleemist, võib versioon olla tähtis: v%1$s</string>
   <string name="help_menu_documentation">Dokumentatsioon</string>
   <string name="help_menu_documentation_subtitle">Tutvu klaviatuuri funktsioonide ja võimalustega</string>
-  <string name="help_menu_discord">Discord server</string>
   <string name="help_menu_email_subtitle">Privaatne tagasiside, abi või ei kasuta GitHubi? Kirjuta meile</string>
   <string name="credits_menu_header_text">Tänan neid inimesi, kes aitasid muuta FUTO klaviatuuri suurepäraseks rakenduseks!</string>
   <string name="credits_menu_team_translators_title">Tõlkijad</string>

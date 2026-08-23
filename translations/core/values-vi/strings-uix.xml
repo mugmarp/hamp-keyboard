@@ -580,10 +580,6 @@
   <string name="help_menu_website_tags">tải xuống, ứng dụng, nhập bằng giọng nói</string>
   <string name="help_menu_documentation">Tài liệu</string>
   <string name="help_menu_documentation_subtitle">Tìm hiểu thêm về các tính năng và khả năng của bàn phím</string>
-  <string name="help_menu_discord">Máy chủ Discord</string>
-  <string name="help_menu_discord_subtitle">Bạn muốn trò chuyện nhưng không thích Zulip? Trò chuyện tại đây</string>
-  <string name="help_menu_futo_chat">Trò chuyện FUTO (Zulip)</string>
-  <string name="help_menu_futo_chat_subtitle">Muốn trò chuyện nhưng không thích Discord? Trò chuyện tại đây</string>
   <string name="help_menu_github">Công cụ theo dõi sự cố công khai (GitHub)</string>
   <string name="help_menu_github_subtitle">Bạn gặp lỗi cụ thể hoặc có yêu cầu tính năng nào không? Hãy đăng tại đây</string>
   <string name="help_menu_email">Gửi email keyboard@futo.org</string>

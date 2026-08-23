@@ -577,10 +577,6 @@
   <string name="help_menu_website_tags">التنزيل، التطبيقات، الإدخال الصوتي</string>
   <string name="help_menu_documentation">الوثائق</string>
   <string name="help_menu_documentation_subtitle">تعرف على المزيد حول ميزات وإمكانيات لوحة المفاتيح</string>
-  <string name="help_menu_discord">Discord Server</string>
-  <string name="help_menu_discord_subtitle">هل ترغب بالتحدث ولكنك لا تفضل Zulip؟ تواصل معنا هنا</string>
-  <string name="help_menu_futo_chat">محادثة FUTO (Zulip)</string>
-  <string name="help_menu_futo_chat_subtitle">هل ترغب بالتحدث ولكنك لا تفضل استخدام ديسكورد؟ تواصل معنا هنا</string>
   <string name="help_menu_github">نظام تتبع المشكلات العامة (GitHub)</string>
   <string name="help_menu_github_subtitle">هل لديك مشكلة محددة أو طلب إضافة ميزة؟ انشرها هنا</string>
   <string name="help_menu_email">بريد إلكتروني keyboard@futo.org</string>

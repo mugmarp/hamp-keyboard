@@ -530,10 +530,6 @@
   <string name="help_menu_website_tags">ladda ner, appar, röstinmatning</string>
   <string name="help_menu_documentation">Dokumentation</string>
   <string name="help_menu_documentation_subtitle">Lär dig mer om tangentbordets funktioner</string>
-  <string name="help_menu_discord">Discordserver</string>
-  <string name="help_menu_discord_subtitle">Vill du prata, men inte på Zulip? Chatta här</string>
-  <string name="help_menu_futo_chat">FUTO Chat</string>
-  <string name="help_menu_futo_chat_subtitle">Vill du prata, men inte på Discord? Chatta här</string>
   <string name="help_menu_github">Offentlig ärendehantering</string>
   <string name="help_menu_github_subtitle">Specifik bugg eller funktionsförslag? Skriv här</string>
   <string name="help_menu_email">E-post keyboard@futo.org</string>

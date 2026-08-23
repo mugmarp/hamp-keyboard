@@ -93,7 +93,7 @@ val HelpMenu = UserSettingsMenu(
             subtitle = R.string.help_menu_website_subtitle,
             style = NavigationItemStyle.Misc,
             navigate = { nav ->
-                nav.context.openURI("https://futo.tech/")
+                nav.context.openURI("https://github.com/mugmarp/HAMP_KEYBOARD")
             }
         ).copy(searchTags = R.string.help_menu_website_tags),
 
@@ -102,23 +102,7 @@ val HelpMenu = UserSettingsMenu(
             subtitle = R.string.help_menu_documentation_subtitle,
             style = NavigationItemStyle.Misc,
             navigate = { nav ->
-                nav.context.openURI("https://docs.keyboard.futo.tech/")
-            }
-        ),
-        userSettingNavigationItem(
-            title = R.string.help_menu_discord,
-            subtitle = R.string.help_menu_discord_subtitle,
-            style = NavigationItemStyle.Misc,
-            navigate = { nav ->
-                nav.context.openURI("https://keyboard.futo.tech/discord")
-            }
-        ),
-        userSettingNavigationItem(
-            title = R.string.help_menu_futo_chat,
-            subtitle = R.string.help_menu_futo_chat_subtitle,
-            style = NavigationItemStyle.Misc,
-            navigate = { nav ->
-                nav.context.openURI("https://chat.futo.org/")
+                nav.context.openURI("https://github.com/mugmarp/HAMP_KEYBOARD#readme")
             }
         ),
         userSettingNavigationItem(
@@ -126,7 +110,7 @@ val HelpMenu = UserSettingsMenu(
             subtitle = R.string.help_menu_github_subtitle,
             style = NavigationItemStyle.Misc,
             navigate = { nav ->
-                nav.context.openURI("https://github.com/futo-org/android-keyboard/issues")
+                nav.context.openURI("https://github.com/mugmarp/HAMP_KEYBOARD/issues")
             }
         ),
         userSettingNavigationItem(
@@ -134,7 +118,7 @@ val HelpMenu = UserSettingsMenu(
             subtitle = R.string.help_menu_email_subtitle,
             style = NavigationItemStyle.Mail,
             navigate = { nav ->
-                nav.context.openURI("mailto:keyboard@futo.org")
+                nav.context.openURI("mailto:markpaulmu@gmail.com")
             }
         ).copy(searchTags = R.string.help_menu_email_tags),
     )

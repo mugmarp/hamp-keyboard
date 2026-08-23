@@ -8,6 +8,8 @@ import org.futo.inputmethod.latin.uix.actions.BugInfo
 import org.futo.inputmethod.latin.uix.actions.BugViewerState
 import org.futo.inputmethod.latin.uix.theme.presets.AMOLEDDarkPurple
 import org.futo.inputmethod.latin.uix.theme.presets.CatppuccinMocha
+import org.futo.inputmethod.latin.uix.theme.presets.CharcoalEmberDark
+import org.futo.inputmethod.latin.uix.theme.presets.CharcoalEmberLight
 import org.futo.inputmethod.latin.uix.theme.presets.ClassicMaterialDark
 import org.futo.inputmethod.latin.uix.theme.presets.ClassicMaterialLight
 import org.futo.inputmethod.latin.uix.theme.presets.CottonCandy
@@ -37,6 +39,9 @@ data class ThemeOption(
 )
 
 val ThemeOptions = mapOf(
+    CharcoalEmberDark.key to CharcoalEmberDark,
+    CharcoalEmberLight.key to CharcoalEmberLight,
+
     DefaultDarkScheme.key to DefaultDarkScheme,
     DefaultLightScheme.key to DefaultLightScheme,
 
@@ -71,10 +76,11 @@ fun defaultThemeOption(context: Context): ThemeOption =
     if(context.resources.getBoolean(R.bool.use_dev_styling)) {
         DevTheme
     } else {
+        // Hamp Keyboard default: the Charcoal & Ember dark palette (design-system default).
         if(DynamicSystemTheme.available(context)) {
-            DynamicSystemTheme
+            CharcoalEmberDark
         } else {
-            DefaultDarkScheme
+            CharcoalEmberDark
         }
     }
 

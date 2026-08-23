@@ -507,10 +507,6 @@
   <string name="help_menu_website_tags">загрузка, приложения, ввод голоса</string>
   <string name="help_menu_documentation">Документация</string>
   <string name="help_menu_documentation_subtitle">Узнайте больше о функциях и возможностях клавиатуры</string>
-  <string name="help_menu_discord">Сервер Discord</string>
-  <string name="help_menu_discord_subtitle">Хотите пообщаться, но не любите Zulip? Общайтесь здесь</string>
-  <string name="help_menu_futo_chat">Чат FUTO</string>
-  <string name="help_menu_futo_chat_subtitle">Хотите пообщаться, но не любите Discord? Общайтесь здесь</string>
   <string name="help_menu_github">Публичный трекер проблем</string>
   <string name="help_menu_github_subtitle">Конкретная ошибка или запрос функции? Напишите здесь</string>
   <string name="help_menu_email">Напишите на keyboard@futo.org</string>

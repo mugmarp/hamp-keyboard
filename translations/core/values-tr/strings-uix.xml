@@ -532,10 +532,6 @@
   <string name="help_menu_website_tags">indir, uygulamalar, sesli giriş</string>
   <string name="help_menu_documentation">Belgeler</string>
   <string name="help_menu_documentation_subtitle">Klavye özellikleri ve yetenekleri hakkında daha fazla bilgi edinin</string>
-  <string name="help_menu_discord">Discord Sunucusu</string>
-  <string name="help_menu_discord_subtitle">\"Konuşmak ister misiniz ama Zulip\'i sevmiyor musunuz? Burada sohbet edin\"</string>
-  <string name="help_menu_futo_chat">FUTO Sohbeti</string>
-  <string name="help_menu_futo_chat_subtitle">\"Konuşmak ister misiniz ama Discord\'u sevmiyor musunuz? Burada sohbet edin\"</string>
   <string name="help_menu_github">Halka açık sorun takipçisi</string>
   <string name="help_menu_github_subtitle">Belirli bir hata veya özellik isteği mi var? Burada paylaşın</string>
   <string name="help_menu_email">E-posta: keyboard@futo.org</string>

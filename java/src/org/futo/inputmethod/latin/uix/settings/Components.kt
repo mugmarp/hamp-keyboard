@@ -42,6 +42,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -127,8 +128,24 @@ fun ScreenTitle(title: String, showBack: Boolean = false, navController: NavHost
         }
         Text(title, style = Typography.Heading.Medium, modifier = Modifier
             .align(CenterVertically)
-            .padding(0.dp, 16.dp))
+            .padding(0.dp, 20.dp, 0.dp, 12.dp))
     }
+}
+
+/**
+ * Uppercase micro-header above a grouped section of rows ("TYPING", "PERSONALIZE", ...).
+ * Charcoal & Ember spec: 11sp / 600 / 0.14em tracking / muted-foreground.
+ */
+@Composable
+fun SectionLabel(text: String) {
+    Text(
+        text = text.uppercase(),
+        style = Typography.SectionLabel,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp, 20.dp, 16.dp, 8.dp)
+    )
 }
 
 @Composable
@@ -150,11 +167,11 @@ fun Tip(text: String = "This is an example tip") {
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer, modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp), shape = RoundedCornerShape(4.dp)
+            .padding(16.dp, 8.dp), shape = RoundedCornerShape(16.dp)
     ) {
         Text(
             text,
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(16.dp),
             style = Typography.Body.RegularMl,
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
@@ -167,7 +184,7 @@ fun WarningTip(text: String = "This is an example tip") {
     Surface(
         color = MaterialTheme.colorScheme.errorContainer, modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp), shape = RoundedCornerShape(4.dp)
+            .padding(16.dp, 8.dp), shape = RoundedCornerShape(16.dp)
     ) {
 
         Text(
@@ -647,6 +664,57 @@ fun ScrollableList(modifier: Modifier = Modifier, spacing: Dp = 0.dp, horizontal
     }
 }
 
+/**
+ * HampSection — Charcoal & Ember grouped-card container, ported from the modern-ui-vision
+ * `Section` primitive (screen.tsx): an optional uppercase label above a rounded-2xl surface
+ * card with the elevate shadow. Rows placed inside get hairline dividers drawn by
+ * [HampSectionDivider] or naturally sit on the card surface.
+ *
+ * Web spec mapping:
+ *   space-y-2.5            -> 10.dp between label / card
+ *   rounded-2xl bg-surface -> RoundedCornerShape(16.dp) + colorScheme.surface
+ *   shadow-elevate         -> hairline top highlight + soft ambient shadow
+ *   px-4                   -> horizontal padding handled by rows themselves
+ */
+@Composable
+fun HampSection(
+    label: String? = null,
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        if(label != null) {
+            SectionLabel(label)
+        }
+        Surface(
+            color = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(16.dp),
+            shadowElevation = 2.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+                .border(
+                    width = 1.dp,
+                    brush = SolidColor(MaterialTheme.colorScheme.outline.copy(alpha = 0.25f)),
+                    shape = RoundedCornerShape(16.dp)
+                )
+        ) {
+            Column(content = content)
+        }
+    }
+    Spacer(modifier = Modifier.height(10.dp))
+}
+
+/** Hairline divider between rows inside a HampSection card. */
+@Composable
+fun HampSectionDivider() {
+    HorizontalDivider(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        thickness = 1.dp,
+        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+    )
+}
+
 @Composable
 fun SettingListLazy(content: LazyListScope.() -> Unit) {
     LazyColumn(
@@ -677,29 +745,32 @@ fun NavigationItem(title: String, style: NavigationItemStyle, navigate: () -> Un
         compact = compact,
         icon = {
             icon?.let {
+                // Charcoal & Ember icon tile: 40dp circle.
+                //  - Accent styles (Home*): primary-soft background + primary icon
+                //  - Neutral styles: surface-raised circle + muted icon
                 val circleColor = when(style) {
-                    NavigationItemStyle.HomePrimary -> MaterialTheme.colorScheme.primaryContainer
-                    NavigationItemStyle.HomeSecondary -> MaterialTheme.colorScheme.secondaryContainer
-                    NavigationItemStyle.HomeTertiary -> MaterialTheme.colorScheme.tertiaryContainer
+                    NavigationItemStyle.HomePrimary -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                    NavigationItemStyle.HomeSecondary -> MaterialTheme.colorScheme.surfaceContainerHighest
+                    NavigationItemStyle.HomeTertiary -> MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f)
 
                     NavigationItemStyle.MiscNoArrow,
                     NavigationItemStyle.Misc,
                     NavigationItemStyle.ExternalLink,
-                    NavigationItemStyle.Mail -> Color.Transparent
+                    NavigationItemStyle.Mail -> MaterialTheme.colorScheme.surfaceContainerHighest
                 }
 
                 val iconColor = when(style) {
-                    NavigationItemStyle.HomePrimary -> MaterialTheme.colorScheme.onPrimaryContainer
-                    NavigationItemStyle.HomeSecondary -> MaterialTheme.colorScheme.onSecondaryContainer
-                    NavigationItemStyle.HomeTertiary -> MaterialTheme.colorScheme.onTertiaryContainer
+                    NavigationItemStyle.HomePrimary -> MaterialTheme.colorScheme.primary
+                    NavigationItemStyle.HomeSecondary -> MaterialTheme.colorScheme.onSurface
+                    NavigationItemStyle.HomeTertiary -> MaterialTheme.colorScheme.tertiary
 
                     NavigationItemStyle.MiscNoArrow,
-                    NavigationItemStyle.Mail,
+                    NavigationItemStyle.Misc,
                     NavigationItemStyle.ExternalLink,
-                    NavigationItemStyle.Misc -> LocalContentColor.current.copy(alpha = 0.75f)
+                    NavigationItemStyle.Mail -> MaterialTheme.colorScheme.onSurfaceVariant
                 }
 
-                Canvas(modifier = Modifier.size(48.dp)) {
+                Canvas(modifier = Modifier.size(40.dp)) {
                     drawCircle(circleColor, this.size.maxDimension / 2.4f)
                     translate(
                         left = this.size.width / 2.0f - icon.intrinsicSize.width / 2.0f,

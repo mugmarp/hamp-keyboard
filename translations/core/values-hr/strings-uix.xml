@@ -499,10 +499,6 @@
   <string name="help_menu_website_tags">preuzimanje, aplikacije, glasovni unos</string>
   <string name="help_menu_documentation">Dokumentacija</string>
   <string name="help_menu_documentation_subtitle">Saznajte više o značajkama i mogućnostima tipkovnice</string>
-  <string name="help_menu_discord">Discord poslužitelj</string>
-  <string name="help_menu_discord_subtitle">Želite razgovarati, ali ne volite Zulip? Čavrljajte ovdje</string>
-  <string name="help_menu_futo_chat">FUTO Chat (Zulip)</string>
-  <string name="help_menu_futo_chat_subtitle">Želite razgovarati, ali ne volite Discord? Čavrljajte ovdje</string>
   <string name="help_menu_github">Javni sustav za praćenje problema (GitHub)</string>
   <string name="help_menu_github_subtitle">Specifična greška ili zahtjev za značajkom? Objavite ovdje</string>
   <string name="help_menu_email">Email: keyboard@futo.org</string>

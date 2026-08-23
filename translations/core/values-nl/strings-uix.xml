@@ -356,10 +356,6 @@
   <string name="help_menu_version_tip">We willen van u horen! Als u een probleem meldt, kan uw versie relevant zijn: v%1$s</string>
   <string name="help_menu_documentation">Documentatie</string>
   <string name="help_menu_documentation_subtitle">Leer meer over de functies en mogelijkheden van het toetsenbord</string>
-  <string name="help_menu_discord">Discord Server</string>
-  <string name="help_menu_discord_subtitle">Wil je praten maar houd je niet van Zulip? Chat hier</string>
-  <string name="help_menu_futo_chat">FUTO Chat</string>
-  <string name="help_menu_futo_chat_subtitle">Wil je praten maar houd je niet van Discord? Chat hier</string>
   <string name="help_menu_github">Openbare probleemtracker</string>
   <string name="help_menu_github_subtitle">Specifiek bug of functieaanvraag? Plaats hier</string>
   <string name="help_menu_email">E-mail keyboard@futo.org</string>

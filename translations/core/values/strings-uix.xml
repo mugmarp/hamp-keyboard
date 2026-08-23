@@ -615,10 +615,6 @@
     <string name="help_menu_website_tags">download, apps, voice input</string>
     <string name="help_menu_documentation">Documentation</string>
     <string name="help_menu_documentation_subtitle">Learn more about the keyboard\'s features and capabilities</string>
-    <string name="help_menu_discord">Discord Server</string>
-    <string name="help_menu_discord_subtitle">Wanna talk but don\'t like Zulip? Chat here</string>
-    <string name="help_menu_futo_chat">FUTO Chat (Zulip)</string>
-    <string name="help_menu_futo_chat_subtitle">Wanna talk but don\'t like Discord? Chat here</string>
     <string name="help_menu_github">Public issue tracker (GitHub)</string>
     <string name="help_menu_github_subtitle">Specific bug or feature request? Post here</string>
     <string name="help_menu_email">Email keyboard@futo.org</string>
