@@ -82,7 +82,7 @@ def dump_locales_and_texts(texts_by_locale):
 
 def generate_templated_code(names, texts_by_locale):
     out = ""
-    with open("src/KeyboardTextsTable.tmpl", "r") as f:
+    with open("KeyboardTextsTable.tmpl", "r") as f:
         for line in f:
             if "@NAMES@" in line:
                 out += dump_names(names) + "\n"
@@ -123,5 +123,5 @@ if __name__ == "__main__":
 
     code = generate_templated_code(names, texts_by_locale)
 
-    with open("../../java/src/com/hamp/inputmethod/keyboard/internal/KeyboardTextsTable.java", "w") as f:
+    with open("../../../java/src/com/hamp/inputmethod/keyboard/internal/KeyboardTextsTable.java", "w") as f:
         f.write(code)
