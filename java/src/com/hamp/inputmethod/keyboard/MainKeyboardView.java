@@ -25,6 +25,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
@@ -58,6 +59,8 @@ import com.hamp.inputmethod.latin.R;
 import com.hamp.inputmethod.latin.SuggestedWords;
 import com.hamp.inputmethod.latin.common.Constants;
 import com.hamp.inputmethod.latin.common.CoordinateUtils;
+import com.hamp.inputmethod.latin.settings.Settings;
+import com.hamp.inputmethod.latin.settings.SettingsValues;
 import com.hamp.inputmethod.latin.uix.theme.KeyDrawingConfiguration;
 import com.hamp.inputmethod.latin.utils.LanguageOnSpacebarUtils;
 import com.hamp.inputmethod.latin.utils.SubtypeLocaleUtils;
@@ -139,6 +142,16 @@ public final class MainKeyboardView extends KeyboardView implements DrawingProxy
     private static final float LANGUAGE_ON_SPACEBAR_TEXT_SHADOW_RADIUS_DISABLED = -1.0f;
     // The minimum x-scale to fit the language name on spacebar.
     private static final float MINIMUM_XSCALE_OF_LANGUAGE_NAME = 0.8f;
+
+    // Spacebar swipe-affordance indicators (Hamp). All ratios are of the spacebar's
+    // shorter dimension so the glyphs scale with the keyboard instead of being fixed px.
+    private static final float INDICATOR_SIZE_RATIO = 0.11f;    // chevron arm length
+    private static final float INDICATOR_STROKE_RATIO = 0.035f; // line thickness
+    private static final float INDICATOR_END_INSET_RATIO = 0.035f; // inset from the bar's ends
+    private static final int INDICATOR_ALPHA = 90;              // faint: affordance, not label
+
+    // Reused across draw calls; allocating a Path on the draw path would churn the heap.
+    private Path mSpacebarIndicatorPath;
 
     // Stuff to draw altCodeWhileTyping keys.
     private final ObjectAnimator mAltCodeKeyWhileTypingFadeoutAnimator;
@@ -814,6 +827,7 @@ public final class MainKeyboardView extends KeyboardView implements DrawingProxy
         final int code = key.getCode();
         if (code == Constants.CODE_SPACE && (key.getIconId().equals("space_key") || mLanguageSwipeProgress != 0.0f)) {
             drawLanguageOnSpacebar(key, canvas, paint, kdc.getHintColor());
+            drawSwipeIndicatorsOnSpacebar(key, canvas, paint, kdc.getHintColor());
             // Whether space key needs to show the "..." popup hint for special purposes
             if (key.isLongPressEnabled() && mHasMultipleEnabledIMEsOrSubtypes) {
                 drawKeyPopupHint(key, canvas, paint, params);
@@ -922,6 +936,174 @@ public final class MainKeyboardView extends KeyboardView implements DrawingProxy
         canvas.restore();
         paint.clearShadowLayer();
         paint.setTextScaleX(1.0f);
+    }
+
+    /**
+     * Draws faint directional indicators on the spacebar advertising the swipe gestures
+     * that are actually available.
+     *
+     * Hamp turns the spacebar into a cursor-control surface, but a gesture with no
+     * affordance is a gesture nobody discovers, so the key hints at what it can do:
+     *
+     *   - Horizontal chevrons at the left and right edges: swiping sideways moves the
+     *     cursor by a character. Drawn ONLY when the spacebar swipe mode is actually set
+     *     to cursor movement - in LANGUAGE mode a sideways swipe switches subtype, and in
+     *     OFF mode it does nothing, so drawing arrows in either case would be a lie.
+     *   - A small stacked chevron pair at one edge: swiping up/down moves the cursor by a
+     *     line. This gesture is unconditional in Hamp (see PointerTracker#onMovePointer-
+     *     Vertical), so the hint is likewise unconditional.
+     *
+     * Everything is drawn at reduced alpha and inset at the edges: the language name owns
+     * the centre of the key, and during a language swipe it animates across the full
+     * width, so indicators are suppressed entirely while that animation is running.
+     */
+    private void drawSwipeIndicatorsOnSpacebar(final Key key, final Canvas canvas,
+            final Paint paint, final int color) {
+        // The language-swipe animation sweeps text across the whole key; stay out of its way.
+        if (mLanguageSwipeProgress != 0.0f) {
+            return;
+        }
+
+        // onDraw can run before settings are loaded, in which case there is nothing to
+        // reflect yet. Skip this frame rather than risk an NPE on the draw path.
+        final Settings settings = Settings.getInstance();
+        if (settings == null) {
+            return;
+        }
+        final SettingsValues settingsValues = settings.getCurrent();
+        if (settingsValues == null) {
+            return;
+        }
+
+        final boolean horizontalMovesCursor =
+                settingsValues.mSpacebarSwipeMode == Settings.SPACEBAR_MODE_CURSOR;
+
+        int width = key.getWidth();
+        int height = key.getHeight();
+
+        canvas.save();
+        // Mirror drawLanguageOnSpacebar's handling of a vertically-oriented spacebar so
+        // the indicators stay aligned with the key rather than the screen.
+        if (key.getUseVerticalSwipe()) {
+            canvas.rotate(-90.0f);
+            canvas.translate(-height, 0.0f);
+            width = key.getHeight();
+            height = key.getWidth();
+        }
+        canvas.clipRect(0, 0, width, height);
+
+        // Size the glyphs from the key so they scale with the keyboard rather than being
+        // fixed pixels that look wrong on a tablet or in a resized layout.
+        //
+        // Careful with orientation: for a vertical spacebar the rotation above sets
+        // width = key.getHeight() and height = key.getWidth(), so in drawing space
+        // `width` is the NARROW axis (roughly 52) and `height` the long one (roughly 360)
+        // - the opposite of the horizontal case. The gesture axes swap with it: what the
+        // user perceives as "along the bar" is the y axis here.
+        //
+        // So the chevrons are laid out along whichever axis is long, and the pair that
+        // indicates the along-the-bar gesture is placed at its two far ends, with the
+        // cross-axis pair kept near one end. That keeps both sets clear of the centre,
+        // where the language name is drawn.
+        final boolean rotated = key.getUseVerticalSwipe();
+        final float longAxis = Math.max(width, height);
+        final float shortAxis = Math.min(width, height);
+        final float armLength = shortAxis * INDICATOR_SIZE_RATIO;
+        final float strokeWidth = Math.max(1.0f, shortAxis * INDICATOR_STROKE_RATIO);
+        // Inset scales with the long axis so the glyphs sit near the ends of the bar in
+        // both orientations instead of drifting toward the middle on a narrow key.
+        final float inset = Math.max(armLength * 1.2f, longAxis * INDICATOR_END_INSET_RATIO);
+        final float crossCentre = shortAxis / 2.0f;
+
+        final Paint.Style oldStyle = paint.getStyle();
+        final float oldStrokeWidth = paint.getStrokeWidth();
+        final Paint.Cap oldCap = paint.getStrokeCap();
+        final Paint.Join oldJoin = paint.getStrokeJoin();
+
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(strokeWidth);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.clearShadowLayer();
+        paint.setColor(color);
+        // Deliberately faint: an affordance, not a label.
+        paint.setAlpha(INDICATOR_ALPHA);
+
+        if (mSpacebarIndicatorPath == null) {
+            mSpacebarIndicatorPath = new Path();
+        }
+        final Path path = mSpacebarIndicatorPath;
+
+        // Chevron helper coordinates are expressed as (alongAxis, crossAxis) and mapped to
+        // real canvas x/y at the end, so one set of maths serves both orientations.
+        //
+        //   horizontal bar : along = x, cross = y
+        //   vertical bar   : along = y, cross = x
+        final float alongEndA = inset;
+        final float alongEndB = longAxis - inset;
+
+        if (horizontalMovesCursor) {
+            // Pair pointing outward at the two far ends of the bar: the along-the-bar
+            // gesture (character-wise cursor movement).
+            drawChevron(canvas, paint, path, rotated,
+                    alongEndA + armLength, crossCentre - armLength,
+                    alongEndA, crossCentre,
+                    alongEndA + armLength, crossCentre + armLength);
+            drawChevron(canvas, paint, path, rotated,
+                    alongEndB - armLength, crossCentre - armLength,
+                    alongEndB, crossCentre,
+                    alongEndB - armLength, crossCentre + armLength);
+        }
+
+        // Cross-axis pair (line-wise cursor movement). Tucked in from one end so it never
+        // collides with the along-axis chevrons above or the language name in the centre.
+        final float crossPairAlong = horizontalMovesCursor
+                ? alongEndA + armLength * 4.0f
+                : alongEndA + armLength;
+        final float gap = armLength * 0.9f;
+
+        drawChevron(canvas, paint, path, rotated,
+                crossPairAlong - armLength, crossCentre - gap,
+                crossPairAlong, crossCentre - gap - armLength,
+                crossPairAlong + armLength, crossCentre - gap);
+        drawChevron(canvas, paint, path, rotated,
+                crossPairAlong - armLength, crossCentre + gap,
+                crossPairAlong, crossCentre + gap + armLength,
+                crossPairAlong + armLength, crossCentre + gap);
+
+        canvas.restore();
+
+        // Restore paint state: this Paint instance is shared across the whole key-drawing
+        // pass, so leaving it in STROKE mode would corrupt every subsequent key.
+        paint.setStyle(oldStyle);
+        paint.setStrokeWidth(oldStrokeWidth);
+        paint.setStrokeCap(oldCap);
+        paint.setStrokeJoin(oldJoin);
+        paint.setAlpha(Constants.Color.ALPHA_OPAQUE);
+    }
+
+    /**
+     * Strokes a three-point chevron given (along, cross) coordinates.
+     *
+     * When {@code rotated} is true the along/cross pair is emitted as (cross, along),
+     * which maps the same layout onto a vertical spacebar without duplicating the maths.
+     */
+    private static void drawChevron(final Canvas canvas, final Paint paint, final Path path,
+            final boolean rotated,
+            final float a1, final float c1,
+            final float a2, final float c2,
+            final float a3, final float c3) {
+        path.reset();
+        if (rotated) {
+            path.moveTo(c1, a1);
+            path.lineTo(c2, a2);
+            path.lineTo(c3, a3);
+        } else {
+            path.moveTo(a1, c1);
+            path.lineTo(a2, c2);
+            path.lineTo(a3, c3);
+        }
+        canvas.drawPath(path, paint);
     }
 
     @Override
