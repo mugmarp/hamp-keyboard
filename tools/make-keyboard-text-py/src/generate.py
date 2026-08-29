@@ -5,7 +5,7 @@ import glob
 
 def load_data():
     all_data = []
-    for fname in glob.glob("locales/*.json"):
+    for fname in glob.glob("../locales/*.json"):
         with open(fname, "r") as f:
             all_data.append(json.loads(f.read()))
 
