@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.futo.inputmethod.annotations;
+package com.hamp.inputmethod.annotations;
 
 /**
  * Denotes that the class, method or field should not be eliminated by ProGuard,

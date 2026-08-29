@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.futo.inputmethod.latin.common;
+package com.hamp.inputmethod.latin.common;
 
-import org.futo.inputmethod.annotations.UsedForTesting;
+import com.hamp.inputmethod.annotations.UsedForTesting;
 
 import javax.annotation.Nonnull;
 
@@ -65,7 +65,7 @@ public final class Constants {
         /**
          * The private IME option used to suppress the floating gesture preview for a given text
          * field. This overrides the corresponding keyboard settings preference.
-         * {@link org.futo.inputmethod.latin.settings.SettingsValues#mGestureFloatingPreviewTextEnabled}
+         * {@link com.hamp.inputmethod.latin.settings.SettingsValues#mGestureFloatingPreviewTextEnabled}
          */
         public static final String NO_FLOATING_GESTURE_PREVIEW = "noGestureFloatingPreview";
 
@@ -191,7 +191,7 @@ public final class Constants {
 
     /**
      * Custom request code used in
-     * {@link org.futo.inputmethod.keyboard.KeyboardActionListener#onCustomRequest(int)}.
+     * {@link com.hamp.inputmethod.keyboard.KeyboardActionListener#onCustomRequest(int)}.
      */
     // The code to show input method picker.
     public static final int CUSTOM_CODE_SHOW_INPUT_METHOD_PICKER = 1;
@@ -229,7 +229,7 @@ public final class Constants {
     /**
      * Special keys code. Must be negative.
      * These should be aligned with constants in
-     * {@link org.futo.inputmethod.keyboard.internal.KeyboardCodesSet}.
+     * {@link com.hamp.inputmethod.keyboard.internal.KeyboardCodesSet}.
      */
     public static final int CODE_SHIFT = -1;
     public static final int CODE_CAPSLOCK = -2;
@@ -310,7 +310,7 @@ public final class Constants {
 
     /**
      * Screen metrics (a.k.a. Device form factor) constants of
-     * {@link org.futo.inputmethod.latin.R.integer#config_screen_metrics}.
+     * {@link com.hamp.inputmethod.latin.R.integer#config_screen_metrics}.
      */
     public static final int SCREEN_METRICS_SMALL_PHONE = 0;
     public static final int SCREEN_METRICS_LARGE_PHONE = 1;
@@ -331,7 +331,7 @@ public final class Constants {
 
     /**
      * Default capacity of gesture points container.
-     * This constant is used by {@link org.futo.inputmethod.keyboard.internal.BatchInputArbiter}
+     * This constant is used by {@link com.hamp.inputmethod.keyboard.internal.BatchInputArbiter}
      * and etc. to preallocate regions that contain gesture event points.
      */
     public static final int DEFAULT_GESTURE_POINTS_CAPACITY = 128;

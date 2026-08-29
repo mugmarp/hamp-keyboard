@@ -1,4 +1,4 @@
-package org.futo.inputmethod.latin
+package com.hamp.inputmethod.latin
 
 import androidx.window.layout.FoldingFeature
 

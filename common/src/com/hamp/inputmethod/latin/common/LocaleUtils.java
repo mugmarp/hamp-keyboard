@@ -14,9 +14,9 @@
  * the License.
  */
 
-package org.futo.inputmethod.latin.common;
+package com.hamp.inputmethod.latin.common;
 
-import org.futo.inputmethod.latin.Subtypes;
+import com.hamp.inputmethod.latin.Subtypes;
 
 import java.util.HashMap;
 import java.util.HashSet;

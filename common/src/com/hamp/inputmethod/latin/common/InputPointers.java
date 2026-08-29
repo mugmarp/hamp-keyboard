@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.futo.inputmethod.latin.common;
+package com.hamp.inputmethod.latin.common;
 
 import android.util.Log;
 
-import org.futo.inputmethod.annotations.UsedForTesting;
+import com.hamp.inputmethod.annotations.UsedForTesting;
 
 import java.util.ArrayList;
 import java.util.HashMap;

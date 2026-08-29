@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.futo.inputmethod.latin.common;
+package com.hamp.inputmethod.latin.common;
 
 import javax.annotation.Nonnull;
 

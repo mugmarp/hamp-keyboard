@@ -14,7 +14,7 @@
  * the License.
  */
 
-package org.futo.inputmethod.latin.common;
+package com.hamp.inputmethod.latin.common;
 
 import java.io.File;
 import java.io.FilenameFilter;
