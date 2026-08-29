@@ -7,13 +7,13 @@ set(LATIN_IME_JNI_INCLUDE
 
 set(LATIN_IME_JNI_SRC_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/src/jni_utils.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/org_futo_inputmethod_keyboard_ProximityInfo.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/org_futo_inputmethod_latin_BinaryDictionary.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/org_futo_inputmethod_latin_BinaryDictionaryUtils.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/org_futo_inputmethod_latin_DicTraverseSession.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/org_futo_inputmethod_latin_xlm_LanguageModel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/org_futo_inputmethod_latin_xlm_AdapterTrainer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/org_futo_inputmethod_latin_xlm_ModelInfoLoader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/com_hamp_inputmethod_keyboard_ProximityInfo.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/com_hamp_inputmethod_latin_BinaryDictionary.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/com_hamp_inputmethod_latin_BinaryDictionaryUtils.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/com_hamp_inputmethod_latin_DicTraverseSession.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/com_hamp_inputmethod_latin_xlm_LanguageModel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/com_hamp_inputmethod_latin_xlm_AdapterTrainer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/com_hamp_inputmethod_latin_xlm_ModelInfoLoader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/org_futo_voiceinput_WhisperGGML.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/jni_common.cpp)
 
