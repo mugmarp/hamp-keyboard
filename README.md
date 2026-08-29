@@ -3,7 +3,7 @@
 Hamp Keyboard is a fork of the [FUTO Keyboard](https://github.com/futo-org/android-keyboard) (itself a fork of [LatinIME, The Android Open-Source Keyboard](https://android.googlesource.com/platform/packages/inputmethods/LatinIME)), customized to install side-by-side with the official FUTO Keyboard app.
 
 - **Display name:** Hamp Keyboard
-- **Application ID:** `org.futo.inputmethod.latin.hamp` — inherited from the upstream package with a `.hamp` suffix so Hamp installs alongside the official FUTO Keyboard instead of replacing it. This is provisional and may be renamed to an independent namespace in a future major version; because an application ID is the IME's identity to Android, such a rename would require re-enabling the keyboard in system settings, so it is deliberately deferred.
+- **Application ID:** `com.hamp.inputmethod.latin.hamp` — inherited from the upstream package with a `.hamp` suffix so Hamp installs alongside the official FUTO Keyboard instead of replacing it. This is provisional and may be renamed to an independent namespace in a future major version; because an application ID is the IME's identity to Android, such a rename would require re-enabling the keyboard in system settings, so it is deliberately deferred.
 - All previously external dependencies (layouts, themes, dictionaries, translations, swipe models, AARs) are vendored directly into this repository — no submodules or GitLab access required.
 
 ## Why Hamp Keyboard exists — what it adds over FUTO Keyboard
@@ -44,7 +44,7 @@ Release builds are currently signed with a debug key, so Android will warn about
 - **Help & Feedback** retargeted to this repository and its maintainer; FUTO website, Discord, and Zulip links removed.
 
 ### 1.0.0
-- Renamed app to "Hamp Keyboard" with application ID `org.futo.inputmethod.latin.hamp` for side-by-side installation with FUTO Keyboard.
+- Renamed app to "Hamp Keyboard" with application ID `com.hamp.inputmethod.latin.hamp` for side-by-side installation with FUTO Keyboard.
 - Removed FUTO-specific payment, update checking, and crash reporting systems.
 - Fixed crash on startup caused by manifest references to removed classes (`CrashLoggingApplication`, `PaymentCompleteActivity`).
 - Vendored all submodule dependencies into the repository.

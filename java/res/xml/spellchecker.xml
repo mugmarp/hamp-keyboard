@@ -22,7 +22,7 @@
 
 <spell-checker xmlns:android="http://schemas.android.com/apk/res/android"
        android:label="@string/spell_checker_service_name"
-       android:settingsActivity="org.futo.inputmethod.latin.hamp.spellcheck.SpellCheckerSettingsActivity">
+       android:settingsActivity="com.hamp.inputmethod.latin.hamp.spellcheck.SpellCheckerSettingsActivity">
     <subtype
             android:label="@string/subtype_generic"
             android:subtypeLocale="en"

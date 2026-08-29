@@ -1,0 +1,14 @@
+//
+// Created by fw on 1/28/24.
+//
+
+#ifndef LATINIME_COM_HAMP_INPUTMETHOD_LATIN_XLM_MODELINFOLOADER_H
+#define LATINIME_COM_HAMP_INPUTMETHOD_LATIN_XLM_MODELINFOLOADER_H
+
+#include "jni.h"
+
+namespace latinime {
+    int register_ModelInfoLoader(JNIEnv *env);
+}
+
+#endif //LATINIME_COM_HAMP_INPUTMETHOD_LATIN_XLM_MODELINFOLOADER_H

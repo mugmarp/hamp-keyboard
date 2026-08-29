@@ -19,16 +19,16 @@ These files contain HAMP-specific customizations that must be preserved:
 ### Core Customizations
 | File | Purpose |
 |------|---------|
-| `java/src/org/futo/inputmethod/latin/InputAttributes.java` | Termius unconditional code field detection |
-| `java/src/org/futo/inputmethod/latin/inputlogic/InputLogic.java` | cursorUp/cursorDown always send DPAD events |
-| `java/src/org/futo/inputmethod/keyboard/PointerTracker.java` | Vertical swipe detection logic |
-| `java/src/org/futo/inputmethod/keyboard/KeyboardActionListener.java` | `onMovePointerVertical` callback |
-| `java/src/org/futo/inputmethod/engine/IMEInterface.kt` | `onMovePointerVertical` interface |
-| `java/src/org/futo/inputmethod/engine/general/GeneralIME.kt` | `onMovePointerVertical` implementation |
-| `java/src/org/futo/inputmethod/engine/general/ChineseIME.kt` | `onMovePointerVertical` implementation |
-| `java/src/org/futo/inputmethod/engine/general/JapaneseIME.kt` | `onMovePointerVertical` implementation |
-| `java/src/org/futo/inputmethod/engine/general/ActionInputTransactionIME.kt` | `onMovePointerVertical` implementation |
-| `java/src/org/futo/inputmethod/latin/LatinIMELegacy.java` | `onMovePointerVertical` wiring |
+| `java/src/com/hamp/inputmethod/latin/InputAttributes.java` | Termius unconditional code field detection |
+| `java/src/com/hamp/inputmethod/latin/inputlogic/InputLogic.java` | cursorUp/cursorDown always send DPAD events |
+| `java/src/com/hamp/inputmethod/keyboard/PointerTracker.java` | Vertical swipe detection logic |
+| `java/src/com/hamp/inputmethod/keyboard/KeyboardActionListener.java` | `onMovePointerVertical` callback |
+| `java/src/com/hamp/inputmethod/engine/IMEInterface.kt` | `onMovePointerVertical` interface |
+| `java/src/com/hamp/inputmethod/engine/general/GeneralIME.kt` | `onMovePointerVertical` implementation |
+| `java/src/com/hamp/inputmethod/engine/general/ChineseIME.kt` | `onMovePointerVertical` implementation |
+| `java/src/com/hamp/inputmethod/engine/general/JapaneseIME.kt` | `onMovePointerVertical` implementation |
+| `java/src/com/hamp/inputmethod/engine/general/ActionInputTransactionIME.kt` | `onMovePointerVertical` implementation |
+| `java/src/com/hamp/inputmethod/latin/LatinIMELegacy.java` | `onMovePointerVertical` wiring |
 
 ### Branding, Theme & Icons
 | File / path | Purpose |
@@ -46,17 +46,17 @@ These files contain HAMP-specific customizations that must be preserved:
 | `java/res/values/strings-appname.xml` | App name "Hamp Keyboard" |
 | `java/unstable/res/values/strings-appname.xml` | App name "Hamp Keyboard [Dev Build]" |
 | `java/res/values/strings-uix.xml` | Theme names, section labels, de-FUTO'd help strings |
-| `java/src/org/futo/inputmethod/latin/uix/theme/presets/CharcoalEmber.kt` | Charcoal & Ember palette (dark + light) |
-| `java/src/org/futo/inputmethod/latin/uix/theme/ThemeOptions.kt` | Preset registration; Charcoal & Ember is the default |
-| `java/src/org/futo/inputmethod/latin/uix/theme/Type.kt` | Bundled font families, `SectionLabel` style |
-| `java/src/org/futo/inputmethod/latin/uix/settings/Components.kt` | `HampSection` grouped cards, icon tiles |
-| `java/src/org/futo/inputmethod/latin/uix/settings/pages/Home.kt` | Grouped settings layout |
-| `java/src/org/futo/inputmethod/latin/uix/settings/pages/Help.kt` | De-FUTO'd links and maintainer email |
-| `java/src/org/futo/inputmethod/latin/uix/settings/pages/CommonComponents.kt` | Material3 replacements for removed FUTO components |
+| `java/src/com/hamp/inputmethod/latin/uix/theme/presets/CharcoalEmber.kt` | Charcoal & Ember palette (dark + light) |
+| `java/src/com/hamp/inputmethod/latin/uix/theme/ThemeOptions.kt` | Preset registration; Charcoal & Ember is the default |
+| `java/src/com/hamp/inputmethod/latin/uix/theme/Type.kt` | Bundled font families, `SectionLabel` style |
+| `java/src/com/hamp/inputmethod/latin/uix/settings/Components.kt` | `HampSection` grouped cards, icon tiles |
+| `java/src/com/hamp/inputmethod/latin/uix/settings/pages/Home.kt` | Grouped settings layout |
+| `java/src/com/hamp/inputmethod/latin/uix/settings/pages/Help.kt` | De-FUTO'd links and maintainer email |
+| `java/src/com/hamp/inputmethod/latin/uix/settings/pages/CommonComponents.kt` | Material3 replacements for removed FUTO components |
 | `java/res/font/*.ttf` | Bundled Space Grotesk + DM Sans |
 | `java/res/raw/licenses/ofl_*.txt` | Font licences (must ship with the fonts) |
 | `java/AndroidManifest.xml` | Removed `CrashLoggingApplication` / `PaymentCompleteActivity` refs |
-| `build.gradle` | Application ID `org.futo.inputmethod.latin.hamp` |
+| `build.gradle` | Application ID `com.hamp.inputmethod.latin.hamp` |
 | `README.md`, `MERGE_WORKFLOW.md` | Hamp documentation |
 
 > **Removed upstream files.** Upstream still has FUTO payment, update-checking and
@@ -135,16 +135,16 @@ else
     # For each protected file, restore our version.
     # Glob patterns are expanded so generated icon sets are covered as a group.
     PROTECTED_FILES=(
-        "java/src/org/futo/inputmethod/latin/InputAttributes.java"
-        "java/src/org/futo/inputmethod/latin/inputlogic/InputLogic.java"
-        "java/src/org/futo/inputmethod/keyboard/PointerTracker.java"
-        "java/src/org/futo/inputmethod/keyboard/KeyboardActionListener.java"
-        "java/src/org/futo/inputmethod/engine/IMEInterface.kt"
-        "java/src/org/futo/inputmethod/engine/general/GeneralIME.kt"
-        "java/src/org/futo/inputmethod/engine/general/ChineseIME.kt"
-        "java/src/org/futo/inputmethod/engine/general/JapaneseIME.kt"
-        "java/src/org/futo/inputmethod/engine/general/ActionInputTransactionIME.kt"
-        "java/src/org/futo/inputmethod/latin/LatinIMELegacy.java"
+        "java/src/com/hamp/inputmethod/latin/InputAttributes.java"
+        "java/src/com/hamp/inputmethod/latin/inputlogic/InputLogic.java"
+        "java/src/com/hamp/inputmethod/keyboard/PointerTracker.java"
+        "java/src/com/hamp/inputmethod/keyboard/KeyboardActionListener.java"
+        "java/src/com/hamp/inputmethod/engine/IMEInterface.kt"
+        "java/src/com/hamp/inputmethod/engine/general/GeneralIME.kt"
+        "java/src/com/hamp/inputmethod/engine/general/ChineseIME.kt"
+        "java/src/com/hamp/inputmethod/engine/general/JapaneseIME.kt"
+        "java/src/com/hamp/inputmethod/engine/general/ActionInputTransactionIME.kt"
+        "java/src/com/hamp/inputmethod/latin/LatinIMELegacy.java"
         "java/AndroidManifest.xml"
         "java/res/mipmap-anydpi-v26/ic_launcher.xml"
         "java/res/mipmap-anydpi-v26/ic_launcher_round.xml"
@@ -153,13 +153,13 @@ else
         "java/res/values/strings-appname.xml"
         "java/unstable/res/values/strings-appname.xml"
         "java/res/values/strings-uix.xml"
-        "java/src/org/futo/inputmethod/latin/uix/theme/presets/CharcoalEmber.kt"
-        "java/src/org/futo/inputmethod/latin/uix/theme/ThemeOptions.kt"
-        "java/src/org/futo/inputmethod/latin/uix/theme/Type.kt"
-        "java/src/org/futo/inputmethod/latin/uix/settings/Components.kt"
-        "java/src/org/futo/inputmethod/latin/uix/settings/pages/Home.kt"
-        "java/src/org/futo/inputmethod/latin/uix/settings/pages/Help.kt"
-        "java/src/org/futo/inputmethod/latin/uix/settings/pages/CommonComponents.kt"
+        "java/src/com/hamp/inputmethod/latin/uix/theme/presets/CharcoalEmber.kt"
+        "java/src/com/hamp/inputmethod/latin/uix/theme/ThemeOptions.kt"
+        "java/src/com/hamp/inputmethod/latin/uix/theme/Type.kt"
+        "java/src/com/hamp/inputmethod/latin/uix/settings/Components.kt"
+        "java/src/com/hamp/inputmethod/latin/uix/settings/pages/Home.kt"
+        "java/src/com/hamp/inputmethod/latin/uix/settings/pages/Help.kt"
+        "java/src/com/hamp/inputmethod/latin/uix/settings/pages/CommonComponents.kt"
         "tools/gen_launcher_icons.py"
         "build.gradle"
         "README.md"

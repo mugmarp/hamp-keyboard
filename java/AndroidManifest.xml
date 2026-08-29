@@ -155,7 +155,7 @@
         <!-- PaymentCompleteActivity was removed along with the FUTO payment system.
              If a payment flow is reintroduced, restore both the activity class and this entry. -->
         <activity
-            android:name="org.futo.inputmethod.latin.MicPermissionActivity"
+            android:name="com.hamp.inputmethod.latin.MicPermissionActivity"
             android:clearTaskOnLaunch="false"
             android:launchMode="standard"
             android:noHistory="true"

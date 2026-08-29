@@ -182,7 +182,7 @@ tasks.register('updateContributors') {
 preBuild.dependsOn updateLocales
 
 android {
-    namespace 'org.futo.inputmethod.latin'
+    namespace 'com.hamp.inputmethod.latin'
 
     compileSdk 35
 
@@ -201,8 +201,8 @@ android {
         versionName getVersionName()
         versionCode getVersionCode()
 
-        applicationId 'org.futo.inputmethod.latin.hamp'
-        testApplicationId 'org.futo.inputmethod.latin.hamp.tests'
+        applicationId 'com.hamp.inputmethod.latin.hamp'
+        testApplicationId 'com.hamp.inputmethod.latin.hamp.tests'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = false
     }

@@ -3,12 +3,12 @@
 
     <application>
         <service
-            android:name="org.futo.inputmethod.updates.UpdateCheckingService"
+            android:name="com.hamp.inputmethod.updates.UpdateCheckingService"
             android:label="@string/autoupdater_service_title"
             android:permission="android.permission.BIND_JOB_SERVICE" >
         </service>
 
-        <receiver android:name="org.futo.inputmethod.updates.InstallReceiver" />
+        <receiver android:name="com.hamp.inputmethod.updates.InstallReceiver" />
 
     </application>
 </manifest>
