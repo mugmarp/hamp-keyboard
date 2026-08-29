@@ -3,7 +3,8 @@
 Hamp Keyboard is a fork of the [FUTO Keyboard](https://github.com/futo-org/android-keyboard) (itself a fork of [LatinIME, The Android Open-Source Keyboard](https://android.googlesource.com/platform/packages/inputmethods/LatinIME)), customized to install side-by-side with the official FUTO Keyboard app.
 
 - **Display name:** Hamp Keyboard
-- **Application ID:** `com.hamp.inputmethod.latin.hamp` — inherited from the upstream package with a `.hamp` suffix so Hamp installs alongside the official FUTO Keyboard instead of replacing it. This is provisional and may be renamed to an independent namespace in a future major version; because an application ID is the IME's identity to Android, such a rename would require re-enabling the keyboard in system settings, so it is deliberately deferred.
+- **Application ID:** `com.hamp.inputmethod.latin.hamp`
+- **Package namespace:** `com.hamp.inputmethod.latin` — a fully independent namespace, not derived from upstream. Hamp installs alongside FUTO Keyboard because the application ID differs.
 - All previously external dependencies (layouts, themes, dictionaries, translations, swipe models, AARs) are vendored directly into this repository — no submodules or GitLab access required.
 
 ## Why Hamp Keyboard exists — what it adds over FUTO Keyboard
@@ -33,18 +34,19 @@ Additional differences from upstream:
 
 Download the APK from the [latest release](https://github.com/mugmarp/hamp-keyboard/releases/latest), install it, then enable **Hamp Keyboard** in Android's *Settings → System → Languages & input → On-screen keyboard*.
 
-Release builds are currently signed with a debug key, so Android will warn about installing from an unknown source. Hamp installs alongside FUTO Keyboard — enabling one does not remove the other.
+Release builds are currently signed with a debug key, so Android will warn about an unknown source.
 
 ## Changelog
 
 ### 1.1.0
+- **Independent package namespace** migrated from `org.futo.inputmethod.latin` to `com.hamp.inputmethod.latin` — Hamp no longer shares any package identity with upstream FUTO Keyboard.
 - **Charcoal & Ember design system** as the default theme: dark-first OKLCH-derived palette with a matching light variant, bundled Space Grotesk + DM Sans typography, circular icon tiles.
 - **Grouped settings**: home screen rows collected into rounded cards (Typing / Personalize / Other) with hairline dividers.
 - **New launcher icon** generated from the Hamp artwork, with a correct adaptive-icon layer split (solid plate background, content-only foreground) and self-contained legacy icons.
 - **Help & Feedback** retargeted to this repository and its maintainer; FUTO website, Discord, and Zulip links removed.
 
 ### 1.0.0
-- Renamed app to "Hamp Keyboard" with application ID `com.hamp.inputmethod.latin.hamp` for side-by-side installation with FUTO Keyboard.
+- Renamed app to "Hamp Keyboard" with application ID `com.hamp.inputmethod.latin.hamp` and package namespace `com.hamp.inputmethod.latin`.
 - Removed FUTO-specific payment, update checking, and crash reporting systems.
 - Fixed crash on startup caused by manifest references to removed classes (`CrashLoggingApplication`, `PaymentCompleteActivity`).
 - Vendored all submodule dependencies into the repository.
