@@ -4,7 +4,8 @@ Hamp Keyboard is a fork of the [FUTO Keyboard](https://github.com/futo-org/andro
 
 - **Display name:** Hamp Keyboard
 - **Application ID:** `com.hamp.inputmethod.latin.hamp`
-- **Package namespace:** `com.hamp.inputmethod.latin` — a fully independent namespace, not derived from upstream. Hamp installs alongside FUTO Keyboard because the application ID differs.
+- **Package namespace:** `com.hamp.inputmethod.latin`
+Hamp installs alongside FUTO Keyboard because the application ID differs.
 - All previously external dependencies (layouts, themes, dictionaries, translations, swipe models, AARs) are vendored directly into this repository — no submodules or GitLab access required.
 
 ## Why Hamp Keyboard exists — what it adds over FUTO Keyboard
@@ -13,9 +14,9 @@ Hamp's core flexibility upgrade: **the spacebar itself becomes a cursor-control 
 
 Traditional keyboards (including upstream FUTO Keyboard) reserve a dedicated **arrow-key row** for cursor movement. That row costs vertical space on every keyboard view and forces your thumb to travel to the layout's edge for every small adjustment.
 
-Hamp keeps those arrow keys available — they're a standard toggle in Keyboard & Typing ("Show Arrow Keys", off by default) — but adds something upstream lacks: **all-direction swiping directly on the spacebar**, enabled out of the box:
+Hamp still keeps those arrow keys available — they're a standard toggle in Keyboard & Typing ("Show Arrow Keys", off by default) — but adds something upstream lacks: **all-direction swiping directly on the spacebar**, enabled out of the box:
 
-- **Swipe left/right on the spacebar** moves the cursor character-by-character; combined with Hamp's fixes it works consistently across all apps and text fields, including terminals like Termius where cursor handling previously misbehaved.
+- **Swipe left/right on the spacebar** moves the cursor character-by-character; combined with Hamp's fixes it works consistently across several apps and text fields, including terminals like Termius where cursor handling previously misbehaved.
 - **You choose your setup**: keep the arrow row if you prefer classic navigation, hide it for a cleaner one-row-shorter keyboard with bigger keys, or use both — the spacebar swipe and the arrow row are fully independent settings.
 - The spacebar swipe mode is configurable (cursor movement / language switching / off) under Keyboard & Typing → Spacebar.
 
