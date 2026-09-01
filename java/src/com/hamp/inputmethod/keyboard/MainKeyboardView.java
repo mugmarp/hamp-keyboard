@@ -1055,11 +1055,9 @@ public final class MainKeyboardView extends KeyboardView implements DrawingProxy
                     alongEndB - armLength, crossCentre + armLength);
         }
 
-        // Cross-axis pair (line-wise cursor movement). Tucked in from one end so it never
-        // collides with the along-axis chevrons above or the language name in the centre.
-        final float crossPairAlong = horizontalMovesCursor
-                ? alongEndA + armLength * 4.0f
-                : alongEndA + armLength;
+        // Cross-axis pair (line-wise cursor movement). Centered on the bar so it sits
+        // directly above/below the language name, not off to one side.
+        final float crossPairAlong = longAxis / 2.0f;
         final float gap = armLength * 0.9f;
 
         drawChevron(canvas, paint, path, rotated,
