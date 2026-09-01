@@ -1057,8 +1057,11 @@ public final class MainKeyboardView extends KeyboardView implements DrawingProxy
 
         // Cross-axis pair (line-wise cursor movement). Centered on the bar so it sits
         // directly above/below the language name, not off to one side.
+        // The gap is based on the actual text height so the chevrons clear the label
+        // instead of overlapping it.
         final float crossPairAlong = longAxis / 2.0f;
-        final float gap = armLength * 0.9f;
+        final float textHeight = -paint.ascent() + paint.descent();
+        final float gap = Math.max(textHeight / 2.0f + armLength * 0.5f, armLength * 2.0f);
 
         drawChevron(canvas, paint, path, rotated,
                 crossPairAlong - armLength, crossCentre - gap,
