@@ -682,15 +682,13 @@ class UixManager(private val latinIME: LatinIME) {
     }
 
     @Composable
-    private fun MainKeyboardViewWithActionBar(
-        needToUseExpandableSuggestionUi: Boolean
-    ) {
+    private fun MainKeyboardViewWithActionBar() {
         val view = LocalView.current
+        val context = LocalContext.current
 
         val actionBarShown = useDataStore(ActionBarDisplayedSetting)
 
         Column {
-            // Don't show suggested words when it's not meant to be shown
             val suggestedWordsOrNull = if(shouldShowSuggestionStrip.value) {
                 suggestedWords.value
             } else {
@@ -731,7 +729,6 @@ class UixManager(private val latinIME: LatinIME) {
                             else null
                     },
                     onQuickClipDismiss = { quickClipState.value = null },
-                    needToUseExpandableSuggestionUi = needToUseExpandableSuggestionUi,
                     loading = latinIME.imeManager.isImeLoading()
                 )
             }
@@ -794,8 +791,7 @@ class UixManager(private val latinIME: LatinIME) {
     }
 
     @Composable
-    private fun ActionViewWithHeader(windowImpl: ActionWindow,
-                                     needToUseExpandableSuggestionUi: Boolean) {
+    private fun ActionViewWithHeader(windowImpl: ActionWindow) {
         val heightDiv = if(mainKeyboardHidden.value) {
             1
         } else {
@@ -845,7 +841,7 @@ class UixManager(private val latinIME: LatinIME) {
                     null
                 }
 
-                if(!needToUseExpandableSuggestionUi) {
+                if(!mainKeyboardHidden.value && !latinIME.isInputConnectionOverridden) {
                     CollapsibleSuggestionsBar(
                         onCollapse = { toggleExpandAction() },
                         onClose = { closeActionWindow() },
@@ -854,11 +850,10 @@ class UixManager(private val latinIME: LatinIME) {
                         showCollapse = currWindowActionWindow.value?.positionIsUserManagable == true,
                         suggestionStripListener = suggestionStripListener
                     )
+                } else if(showingAboveKeyboard) {
+                    ActionSep()
+                    Spacer(Modifier.height(1.dp))
                 }
-            } else if(showingAboveKeyboard && !needToUseExpandableSuggestionUi) {
-                ActionSep()
-                Spacer(Modifier.height(1.dp))
-            }
         }
     }
 
@@ -1273,57 +1268,23 @@ class UixManager(private val latinIME: LatinIME) {
             KeyboardWindowSelector { gap ->
                 Column {
                     Box(Modifier.onGloballyPositioned { floatingPreeditPosition.value = it })
-                    // TODO: Refactor how we handle expandable suggestions here to not be a mess
-                    val needToUseExpandableSuggestionUi =
-                        expandableSuggestionCfg.value.useExpandableUi && suggestedWords.value?.size()?.equals(0) != true
-                                && mainKeyboardHidden.value == false
-                                && (quickClipState.value == null || inlineStuffHiddenByTyping.value)
-                                && currentNotice.value == null
-                                && (inlineSuggestions.value.isEmpty() || inlineStuffHiddenByTyping.value)
+
                     when {
                         currWindowActionWindow.value != null -> ActionViewWithHeader(
                             currWindowActionWindow.value!!,
-                            needToUseExpandableSuggestionUi
+                            false
                         )
 
-                        else -> MainKeyboardViewWithActionBar(
-                            needToUseExpandableSuggestionUi
-                        )
+                        else -> MainKeyboardViewWithActionBar(false)
                     }
 
-                    if(!needToUseExpandableSuggestionUi) {
-                        Spacer(modifier = Modifier.height(gap))
-                    }
+                    Spacer(modifier = Modifier.height(gap))
 
                     val kbHeight = remember { mutableIntStateOf(latinIME.size.value!!.height) }
-                    val keyboardViewOffset = remember(needToUseExpandableSuggestionUi) { mutableIntStateOf(0) }
-                    Box(Modifier.let {
-                        if(needToUseExpandableSuggestionUi) {
-                            it.height(
-                                with(LocalDensity.current) { kbHeight.intValue.toDp() }
-                                        + latinIME.sizingCalculator.calculateSuggestionBarHeightDp().dp
-                                        + gap
-                            )
-                        } else {
-                            it
-                        }
-                    }) {
-                        if(needToUseExpandableSuggestionUi) {
-                            ActionBarWithExpandableCandidates(
-                                suggestedWords.value,
-                                suggestionStripListener,
-                                isActionsExpanded = isActionsExpanded.value,
-                                toggleActionsExpanded = { toggleActionsExpanded() },
-                                closeActionWindow = currWindowActionWindow.value?.let {{ closeActionWindow() }},
-                                keyboardOffset = keyboardViewOffset,
-                                keyboardHeight = (latinIME.size.value?.height ?: kbHeight.intValue) + with(LocalDensity.current) { navBarHeight().toPx().toInt() },
-                                expandableSuggestionCfg = expandableSuggestionCfg.value
-                            )
-                        }
+                    Box {
                         latinIME.LegacyKeyboardView(modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .onSizeChanged {
-                                // TODO: Is there a better way?
                                 kbHeight.intValue = it.height.let {
                                     if (it > 0) {
                                         it
@@ -1331,13 +1292,8 @@ class UixManager(private val latinIME: LatinIME) {
                                         latinIME.size.value!!.height
                                     }
                                 }
-                            }
-                            .absoluteOffset { IntOffset(0, keyboardViewOffset.intValue) },
+                            },
                             hidden = mainKeyboardHidden.value)
-                    }
-
-                    if(latinIME.size.value !is FloatingKeyboardSize) {
-                        Spacer(Modifier.height(navBarHeight()))
                     }
                 }
 

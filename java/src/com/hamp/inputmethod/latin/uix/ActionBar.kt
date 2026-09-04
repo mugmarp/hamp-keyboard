@@ -823,7 +823,6 @@ fun ActionBar(
     keyboardManagerForAction: KeyboardManagerForAction? = null,
     quickClipState: QuickClipState? = null,
     onQuickClipDismiss: () -> Unit = {},
-    needToUseExpandableSuggestionUi: Boolean = false,
     loading: Boolean = false,
 ) {
     val view = LocalView.current
@@ -831,75 +830,59 @@ fun ActionBar(
 
     val oldActionBar = useDataStore(OldStyleActionsBar)
 
-    val useDoubleHeight = isActionsExpanded && oldActionBar.value == false
-
-    Column(Modifier
-        .height(
-            ActionBarHeight * (if (useDoubleHeight) 2 else 1).let {
-                if(needToUseExpandableSuggestionUi) {
-                    it - 1
-                } else {
-                    it
-                }
+    // Single fixed-height strip: action items and suggestions share the same space
+    Row(
+        Modifier
+            .height(ActionBarHeight)
+            .fillMaxWidth()
+            .semantics {
+                testTag = "ActionBar"
+                testTagsAsResourceId = true
             }
-        )
-        .semantics {
-            testTag = "ActionBar"
-            testTagsAsResourceId = true
-        }) {
-        if(isActionsExpanded && !oldActionBar.value) {
-            ActionSep()
-
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1.0f),
-                color = LocalKeyboardScheme.current.keyboardSurfaceDim//actionBarColor()
-            ) {
-                ActionItems(onActionActivated, onActionAltActivated)
-            }
-        }
-
-        if(needToUseExpandableSuggestionUi) return@Column
+    ) {
         ActionSep()
 
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1.0f), color = actionBarColor()
+        // Left: expand/collapse button
+        IconButton(
+            onClick = {
+                toggleActionsExpanded()
+                keyboardManagerForAction?.performHapticAndAudioFeedback(
+                    Constants.CODE_TAB,
+                    view
+                )
+            },
+            modifier = Modifier.width(40.dp)
         ) {
-            Row(Modifier.safeKeyboardPadding()) {
-                ExpandActionsButton(isActionsExpanded) {
-                    toggleActionsExpanded()
+            Icon(
+                Icons.Default.KeyboardArrowUp,
+                contentDescription = null,
+                modifier = Modifier.rotate(if (isActionsExpanded) 180f else 0f)
+            )
+        }
 
-                    keyboardManagerForAction?.performHapticAndAudioFeedback(
-                        Constants.CODE_TAB,
-                        view
-                    )
-                }
-
-                if(oldActionBar.value && isActionsExpanded) {
-                    Box(modifier = Modifier
-                        .weight(1.0f)
-                        .fillMaxHeight()) {
-                        ActionItems(onActionActivated, onActionAltActivated)
-                    }
-                } else {
+        // Middle: either action items OR suggestions (mutually exclusive)
+        Box(modifier = Modifier.weight(1.0f).fillMaxHeight()) {
+            if (isActionsExpanded) {
+                // Show action items in the same strip
+                ActionItems(onActionActivated, onActionAltActivated)
+            } else {
+                // Show suggestions, inline candidates, etc.
+                Row(Modifier.safeKeyboardPadding()) {
                     if (importantNotice != null) {
                         ImportantNoticeView(importantNotice)
                     } else {
-                        if(loading) {
+                        if (loading) {
                             Spacer(Modifier.weight(1.0f))
                             CircularProgressIndicator(
                                 modifier = Modifier.size(32.dp).align(CenterVertically),
                                 color = MaterialTheme.colorScheme.primary
                             )
                             Spacer(Modifier.weight(1.0f))
-                        } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
                             && inlineSuggestions.isNotEmpty()
                         ) {
                             InlineSuggestions(inlineSuggestions)
-                        } else if(quickClipState != null) {
+                        } else if (quickClipState != null) {
                             QuickClipView(quickClipState, onQuickClipDismiss)
                         } else if (words != null) {
                             SuggestionItems(
@@ -922,7 +905,7 @@ fun ActionBar(
                             Spacer(modifier = Modifier.weight(1.0f))
                         }
 
-                        if(inlineSuggestions.isEmpty()) {
+                        if (inlineSuggestions.isEmpty()) {
                             PinnedActionItems(onActionActivated, onActionAltActivated)
                         }
                     }
