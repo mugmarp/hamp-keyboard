@@ -27,6 +27,7 @@ import android.view.inputmethod.EditorInfo;
 import androidx.annotation.Nullable;
 
 import com.hamp.inputmethod.latin.common.StringUtils;
+import com.hamp.inputmethod.latin.settings.SettingsValues;
 import com.hamp.inputmethod.latin.utils.InputTypeUtils;
 
 import java.util.ArrayList;
@@ -141,14 +142,22 @@ public final class InputAttributes {
 
         // If user has enabled "Always show suggestions", override the app's request
         // but still respect critical suppressions (password fields, private flags, no-composition)
-        val ignoreAppSuggestionHiding = mSettingsValues.shouldIgnoreAppSuggestionHiding()
+        boolean ignoreAppSuggestionHiding = false;
+        try {
+            SettingsValues settingsValues = Settings.getInstance().getCurrent();
+            if (settingsValues != null) {
+                ignoreAppSuggestionHiding = settingsValues.shouldIgnoreAppSuggestionHiding();
+            }
+        } catch (Exception e) {
+            // Ignore
+        }
 
-        mShouldShowSuggestions = if (ignoreAppSuggestionHiding) {
+        if (ignoreAppSuggestionHiding) {
             // User override: show suggestions unless critically suppressed
-            !shouldSuppressSuggestions
+            mShouldShowSuggestions = !shouldSuppressSuggestions;
         } else {
             // Default behavior: respect app's request to hide suggestions
-            !(shouldSuppressSuggestions || appRequestsHideSuggestions)
+            mShouldShowSuggestions = !(shouldSuppressSuggestions || appRequestsHideSuggestions);
         }
 
         mShouldInsertSpacesAutomatically = InputTypeUtils.isAutoSpaceFriendlyType(inputType)
