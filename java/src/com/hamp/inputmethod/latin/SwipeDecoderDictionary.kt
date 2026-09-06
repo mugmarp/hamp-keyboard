@@ -308,7 +308,7 @@ class SwipeDecoderDictionary(val context: Context, val locale: Locale) : Diction
 
         @JvmStatic
         fun canBeUsed(): Boolean {
-            val settings = Settings.getInstance().current
+            val settings = Settings.getInstance().current ?: return false
             if(!settings.mGestureInputEnabled) {
                 Log.d("SwipeDecoderDictionary", "Inactive because gesture input is disabled.")
                 return false
@@ -328,18 +328,23 @@ class SwipeDecoderDictionary(val context: Context, val locale: Locale) : Diction
     }
 
     private fun getOrInitDecoder(): SwipeDecoder = decoder ?: run {
-        val swipeModelPath = getFilePath(context, SWIPE_MODEL)
+        try {
+            val swipeModelPath = getFilePath(context, SWIPE_MODEL)
 
-        val decoder = SwipeDecoder(
-            encoderPath = swipeModelPath,
-            beamWidth = BeamValues.highestBeam,
-            useExpansion = false, // ITrie contains expanded entries already
-        )
+            val decoder = SwipeDecoder(
+                encoderPath = swipeModelPath,
+                beamWidth = BeamValues.highestBeam,
+                useExpansion = false, // ITrie contains expanded entries already
+            )
 
-        this.decoder = decoder
-        applyPendingLayoutInfo()
+            this.decoder = decoder
+            applyPendingLayoutInfo()
 
-        return decoder
+            return decoder
+        } catch (e: Exception) {
+            Log.e("SwipeDecoderDictionary", "Failed to initialize swipe decoder", e)
+            throw e
+        }
     }
 
     override fun getNextValidCodePoints(composedData: ComposedData?): ArrayList<Int> {
@@ -352,23 +357,27 @@ class SwipeDecoderDictionary(val context: Context, val locale: Locale) : Diction
     ): ArrayList<SuggestedWords.SuggestedWordInfo>? {
         if(true) return null
 
-        val decoder = getOrInitDecoder()
-        val wordsContext = ngramContext?.fullContext?.split(' ')?.takeLast(10) ?: emptyList()
-        decoder.setContext(wordsContext)
+        try {
+            val decoder = getOrInitDecoder()
+            val wordsContext = ngramContext?.fullContext?.split(' ')?.takeLast(10) ?: emptyList()
+            decoder.setContext(wordsContext)
 
-        val results = decoder.predictNext()
+            val results = decoder.predictNext()
 
-        //Log.d("SwipeDecoderDictionary", "getPredictions results=${results}")
-        val list = ArrayList<SuggestedWords.SuggestedWordInfo>(results.size)
-        results.forEach {
-            list.add(SuggestedWords.SuggestedWordInfo(
-                it.word, "", (it.score * 1000.0f + 10000.0f).toInt(), SuggestedWords.SuggestedWordInfo.KIND_CORRECTION, this, 0, 0
-            ).apply {
-                mOriginatesFromSwipeModel = true
-            })
+            val list = ArrayList<SuggestedWords.SuggestedWordInfo>(results.size)
+            results.forEach {
+                list.add(SuggestedWords.SuggestedWordInfo(
+                    it.word, "", (it.score * 1000.0f + 10000.0f).toInt(), SuggestedWords.SuggestedWordInfo.KIND_CORRECTION, this, 0, 0
+                ).apply {
+                    mOriginatesFromSwipeModel = true
+                })
+            }
+
+            return list
+        } catch (e: Exception) {
+            Log.e("SwipeDecoderDictionary", "Error during swipe predictions", e)
+            return null
         }
-
-        return list
     }
 
     override fun getSuggestions(
@@ -385,6 +394,20 @@ class SwipeDecoderDictionary(val context: Context, val locale: Locale) : Diction
 
     val whitespaceRegex = Regex("\\W+")
     fun getSuggestions(
+        composedData: ComposedData,
+        ngramContext: NgramContext?,
+        useHighBeam: Boolean,
+        trieWeights: FloatArray
+    ): ArrayList<SuggestedWords.SuggestedWordInfo>? {
+        try {
+            return getSuggestionsInternal(composedData, ngramContext, useHighBeam, trieWeights)
+        } catch (e: Exception) {
+            Log.e("SwipeDecoderDictionary", "Error during swipe decoding", e)
+            return null
+        }
+    }
+
+    private fun getSuggestionsInternal(
         composedData: ComposedData,
         ngramContext: NgramContext?,
         useHighBeam: Boolean,
@@ -459,17 +482,22 @@ class SwipeDecoderDictionary(val context: Context, val locale: Locale) : Diction
 
         val topK = if(useHighBeam) 4 else 1
 
-        val results = synchronized(BinaryDictionary.sTrieUsageLock) {
-            if(appliedTries?.isEmpty() != false) {
-                Log.e("SwipeDecoderDictionary", "Applied tries are blank! $appliedTries")
-                return null
+        val results = try {
+            synchronized(BinaryDictionary.sTrieUsageLock) {
+                if(appliedTries?.isEmpty() != false) {
+                    Log.e("SwipeDecoderDictionary", "Applied tries are blank! $appliedTries")
+                    return null
+                }
+                decoder.recognize(
+                     left.toTypedArray(), right.toTypedArray(),
+                     topK = topK,
+                     beamWidth = beamWidth,
+                     trieWeights = trieWeights
+                )
             }
-            decoder.recognize(
-                 left.toTypedArray(), right.toTypedArray(),
-                 topK = topK,
-                 beamWidth = beamWidth,
-                 trieWeights = trieWeights
-            )
+        } catch (e: Exception) {
+            Log.e("SwipeDecoderDictionary", "Error during swipe recognition", e)
+            return null
         }
 
         // basically update it at end of swiping
