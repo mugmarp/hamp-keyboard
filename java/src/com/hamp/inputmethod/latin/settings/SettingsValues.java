@@ -129,6 +129,7 @@ public class SettingsValues {
     public final boolean mAutoCorrectionEnabledPerUserSettings;
     public final boolean mAutoCorrectionEnabledPerTextFieldSettings;
     private final boolean mSuggestionsEnabledPerUserSettings;
+    private final boolean mIgnoreAppSuggestionHiding;
     private final AsyncResultHolder<AppWorkaroundsUtils> mAppWorkarounds;
 
     // Debug settings
@@ -243,6 +244,7 @@ public class SettingsValues {
                 && !mInputAttributes.mInputTypeNoAutoCorrect;
         mAutoCorrectionEnabledPerTextFieldSettings = !mInputAttributes.mInputTypeNoAutoCorrect;
         mSuggestionsEnabledPerUserSettings = readSuggestionsEnabled(prefs);
+        mIgnoreAppSuggestionHiding = prefs.getBoolean(Settings.PREF_IGNORE_APP_SUGGESTION_HIDING, false);
         mIsInternal = Settings.isInternal(prefs);
         mHasCustomKeyPreviewAnimationParams = prefs.getBoolean(
                 DebugSettings.PREF_HAS_CUSTOM_KEY_PREVIEW_ANIMATION_PARAMS, false);
@@ -300,6 +302,10 @@ public class SettingsValues {
 
     public boolean isSuggestionsEnabledPerUserSettings() {
         return mSuggestionsEnabledPerUserSettings;
+    }
+
+    public boolean shouldIgnoreAppSuggestionHiding() {
+        return mIgnoreAppSuggestionHiding;
     }
 
     public boolean isPersonalizationEnabled() {

@@ -56,6 +56,9 @@
     <string name="prefs_show_suggestions">Show correction suggestions</string>
     <!-- Description for show suggestions -->
     <string name="prefs_show_suggestions_summary">Display suggested words while typing</string>
+    <!-- Option to ignore app's request to hide suggestions -->
+    <string name="prefs_ignore_app_suggestion_hiding">Always show suggestions</string>
+    <string name="prefs_ignore_app_suggestion_hiding_summary">Override app requests to hide suggestions</string>
 
     <!-- Option to block potentially offensive words to be shown [CHAR_LIMIT=30] -->
     <string name="prefs_block_potentially_offensive_title">Block offensive words</string>

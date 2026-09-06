@@ -101,6 +101,13 @@ val PredictiveTextMenu = UserSettingsMenu(
         ),
 
         userSettingToggleSharedPrefs(
+            title = R.string.prefs_ignore_app_suggestion_hiding,
+            subtitle = R.string.prefs_ignore_app_suggestion_hiding_summary,
+            key = Settings.PREF_IGNORE_APP_SUGGESTION_HIDING,
+            default = {false}
+        ),
+
+        userSettingToggleSharedPrefs(
             title = R.string.use_personalized_dicts,
             subtitle = R.string.use_personalized_dicts_summary,
             key = Settings.PREF_KEY_USE_PERSONALIZED_DICTS,

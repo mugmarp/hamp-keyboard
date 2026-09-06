@@ -135,7 +135,21 @@ public final class InputAttributes {
         final boolean shouldSuppressSuggestions = mIsPasswordField
                 || forceNoSuggestionsByPrivateFlag
                 || codeFieldType == CODE_FIELD_NO_COMPOSITION;
-        mShouldShowSuggestions = !shouldSuppressSuggestions;
+
+        // Check if the app is requesting to hide suggestions via TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        final boolean appRequestsHideSuggestions = flagNoSuggestions;
+
+        // If user has enabled "Always show suggestions", override the app's request
+        // but still respect critical suppressions (password fields, private flags, no-composition)
+        val ignoreAppSuggestionHiding = mSettingsValues.shouldIgnoreAppSuggestionHiding()
+
+        mShouldShowSuggestions = if (ignoreAppSuggestionHiding) {
+            // User override: show suggestions unless critically suppressed
+            !shouldSuppressSuggestions
+        } else {
+            // Default behavior: respect app's request to hide suggestions
+            !(shouldSuppressSuggestions || appRequestsHideSuggestions)
+        }
 
         mShouldInsertSpacesAutomatically = InputTypeUtils.isAutoSpaceFriendlyType(inputType)
             && !mIsCodeField;
