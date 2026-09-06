@@ -27,6 +27,7 @@ import android.view.inputmethod.EditorInfo;
 import androidx.annotation.Nullable;
 
 import com.hamp.inputmethod.latin.common.StringUtils;
+import com.hamp.inputmethod.latin.settings.Settings;
 import com.hamp.inputmethod.latin.settings.SettingsValues;
 import com.hamp.inputmethod.latin.utils.InputTypeUtils;
 
