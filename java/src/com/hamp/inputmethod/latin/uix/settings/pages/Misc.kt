@@ -13,7 +13,6 @@ import com.hamp.inputmethod.latin.uix.settings.UserSetting
 import com.hamp.inputmethod.latin.uix.settings.UserSettingsMenu
 import com.hamp.inputmethod.latin.uix.settings.userSettingDecorationOnly
 import com.hamp.inputmethod.latin.uix.settings.userSettingNavigationItem
-import com.hamp.inputmethod.latin.uix.settings.copyToClipboard
 import com.hamp.inputmethod.updates.openURI
 import androidx.compose.ui.platform.LocalContext
 
