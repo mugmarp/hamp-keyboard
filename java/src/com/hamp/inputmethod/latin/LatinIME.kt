@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -563,27 +564,7 @@ class LatinIME : InputMethodServiceCompose(), LatinIMELegacy.SuggestionStripCont
     }
 
     // The keyboard view really doesn't like being detached, so it's always
-    // shown, but resized to 0 if an action window is open.
-    //
-    // FLICKER FIX (Step 2): the previous implementation wrapped the AndroidView in
-    // `key(legacyInputView)`, which forced Compose to dispose and recreate the entire
-    // AndroidView node every time legacyInputView.value changed. The factory also did
-    // `removeView(it.parent as ViewGroup)` on every recomposition. During the 1-frame
-    // gap between teardown and the new view's first draw, the rendering system briefly
-    // showed a cached image of the previous keyboard — the "flash of stale screen"
-    // reported on every focus change.
-    //
-    // The new implementation:
-    //   * does NOT use key(), so the AndroidView node is created once for the lifetime
-    //     of the IME session and never torn down.
-    //   * the factory attaches whichever view legacyInputView.value points to the first
-    //     time it runs, then leaves it attached for the whole session. If the view
-    //     isn't ready yet, an empty placeholder is attached and the real view arrives
-    //     on the next recomposition.
-    //   * the update lambda only logs a warning if it detects a reassignment — with
-    //     Steps 1 + 3 in place, legacyInputView.value should not change after the
-    //     initial attach, so the warning surfaces unexpected regressions.
-    //   * onRelease still tears down at the end of the IME session's life.
+    // shown, but resized to 0 if an action window is open
     @Composable
     internal fun LegacyKeyboardView(modifier: Modifier, hidden: Boolean) {
         val modifier = if(hidden) {
@@ -596,58 +577,21 @@ class LatinIME : InputMethodServiceCompose(), LatinIMELegacy.SuggestionStripCont
             }
         }.safeKeyboardPadding()
 
-        AndroidView(
-            factory = { ctx ->
-                // Attach the InputView that onCreateInputView() set up. If it isn't
-                // ready yet (rare race during the very first composition), attach an
-                // empty placeholder; the real view will arrive on the next
-                // recomposition after legacyInputView.value is set.
-                val v = legacyInputView.value
-                if (v != null) {
-                    // Detach from any previous parent (mInputMethodService may have
-                    // attached it to itself transiently).
-                    if (v.parent != null) (v.parent as ViewGroup).removeView(v)
-                    v
-                } else {
-                    ViewGroup(ctx)
+        val legacyInputView = legacyInputView.value
+        key(legacyInputView) {
+            AndroidView(factory = {
+                legacyInputView!!.also {
+                    if(it.parent != null) (it.parent as ViewGroup).removeView(it)
                 }
-            },
-            update = { currentView ->
-                // legacyInputView should already be set by the time the update lambda
-                // runs (the first composition's factory attached the real view, or a
-                // placeholder if not). If something later reassigned
-                // legacyInputView.value to a different view, that's a bug — the whole
-                // point of Steps 1+3 is that the InputView is only ever inflated once.
-                // Log it so the regression is visible, but keep the current view
-                // attached to avoid reintroducing the flicker we just removed.
-                val desired = legacyInputView.value
-                if (desired != null && currentView !== desired) {
-                    Log.w(
-                        "LatinIME",
-                        "LegacyKeyboardView: legacyInputView was reassigned but the " +
-                            "AndroidView is stable; ignoring the new view to avoid " +
-                            "recreating the input view (see flicker fix)."
-                    )
-                }
-            },
-            modifier = modifier,
-            onRelease = { view ->
-                if (view is InputView) {
-                    view.deallocateMemory()
-                    view.removeAllViews()
-                } else if (view is ViewGroup) {
-                    view.removeAllViews()
-                }
-            }
-        )
+            }, modifier = modifier, onRelease = {
+                val view = it as InputView
+                view.deallocateMemory()
+                view.removeAllViews()
+            })
+        }
     }
 
-    // necessary for when KeyboardSwitcher updates the theme. With Steps 1 and 3 in
-    // place, KeyboardSwitcher.updateKeyboardTheme no longer inflates a new InputView
-    // when the IME is already showing, so this setter only fires on the very first
-    // onCreateInputView (or on a real service restart). In normal operation
-    // (focus changes, theme tweaks), the InputView is kept and the new keyboard is
-    // loaded into the existing MainKeyboardView via setKeyboard(...).
+    // necessary for when KeyboardSwitcher updates the theme
     fun updateLegacyView(newView: View) {
         legacyInputView.value = newView
         composeView?.let {

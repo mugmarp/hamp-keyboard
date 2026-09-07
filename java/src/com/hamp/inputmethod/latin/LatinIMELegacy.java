@@ -368,20 +368,7 @@ public class LatinIMELegacy implements KeyboardActionListener,
     void onStartInputViewInternal(final EditorInfo editorInfo, final boolean restarting) {
         mRichImm.refreshSubtypeCaches();
         final KeyboardSwitcher switcher = mKeyboardSwitcher;
-        // FLICKER FIX (Step 1): previously, switcher.updateKeyboardTheme(mDisplayContext) was
-        // called unconditionally on every onStartInputView (i.e. on every focus change between
-        // text fields and apps). When the theme hadn't actually changed, KeyboardSwitcher
-        // would still queue a theme switch and rebuild the entire InputView via
-        // updateLegacyView(onCreateInputView(...)), which tore down the Compose AndroidView
-        // and produced a 1-frame flicker of the previous keyboard.
-        //
-        // Now we only re-apply the theme on a fresh show (!restarting) or when an explicit
-        // theme switch is pending (e.g. the user just toggled dark mode). On the common
-        // "user is just switching fields" case (restarting=true), the existing InputView is
-        // kept and the new keyboard layout is loaded below via switcher.loadKeyboard(...).
-        if (!restarting || switcher.isThemeSwitchPending()) {
-            switcher.updateKeyboardTheme(mDisplayContext);
-        }
+        switcher.updateKeyboardTheme(mDisplayContext);
         final MainKeyboardView mainKeyboardView = switcher.getMainKeyboardView();
         // If we are starting input in a different text field from before, we'll have to reload
         // settings, so currentSettingsValues can't be final.
