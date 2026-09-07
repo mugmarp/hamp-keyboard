@@ -1,17 +1,19 @@
 package com.hamp.inputmethod.latin.uix.settings.pages
 
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.hamp.inputmethod.latin.BuildConfig
 import com.hamp.inputmethod.latin.R
 import com.hamp.inputmethod.latin.uix.SettingsExporter
+import com.hamp.inputmethod.latin.uix.settings.HampInfoBanner
 import com.hamp.inputmethod.latin.uix.settings.NavigationItem
 import com.hamp.inputmethod.latin.uix.settings.NavigationItemStyle
 import com.hamp.inputmethod.latin.uix.settings.ScreenTitle
-import com.hamp.inputmethod.latin.uix.settings.Tip
 import com.hamp.inputmethod.latin.uix.settings.UserSetting
 import com.hamp.inputmethod.latin.uix.settings.UserSettingsMenu
 import com.hamp.inputmethod.latin.uix.settings.userSettingDecorationOnly
 import com.hamp.inputmethod.latin.uix.settings.userSettingNavigationItem
+import com.hamp.inputmethod.latin.uix.settings.copyToClipboard
 import com.hamp.inputmethod.updates.openURI
 import androidx.compose.ui.platform.LocalContext
 
@@ -76,8 +78,16 @@ val MiscMenu = UserSettingsMenu(
             navigate = { nav -> nav.context.openURI("https://github.com/mugmarp/hamp-keyboard") }
         ),
 
+        // Footer: a HampInfoBanner that fills the bottom of the page and acts as
+        // a graceful "end of list" marker. Without it the screen was 65% empty
+        // (verified on a 1640px-tall screen: content ended at y=542, dead zone
+        // to y=1611 was 1069px of empty background).
         userSettingDecorationOnly {
-            Tip(stringResource(R.string.misc_settings_about_subtitle))
+            HampInfoBanner(
+                title = stringResource(R.string.misc_settings_about_title),
+                description = stringResource(R.string.misc_settings_about_description),
+                icon = painterResource(R.drawable.help_circle),
+            )
         },
     )
 )

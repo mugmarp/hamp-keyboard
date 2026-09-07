@@ -178,6 +178,75 @@ fun Tip(text: String = "This is an example tip") {
     }
 }
 
+/**
+ * Top-of-screen notice card (e.g. "Models run on your device", "Debug build",
+ * "You're on a development build").
+ *
+ * Layout: a 16dp rounded [Surface] using the Charcoal & Ember `surface` token,
+ * holding a leading icon (top-aligned) and a column with a bold title and a
+ * secondary-color body. The icon column has a fixed width so the text column
+ * always starts at the same offset regardless of the icon's intrinsic size.
+ *
+ * Use sparingly. One or two of these per page, placed at the top of a settings
+ * section, not at the bottom as a footer (that's what the `Tip` is for).
+ */
+@Composable
+fun HampInfoBanner(
+    title: String,
+    description: String,
+    icon: Painter? = null,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        color = MaterialTheme.colorScheme.surface,
+        shape = RoundedCornerShape(16.dp),
+        border = androidx.compose.foundation.BorderStroke(
+            width = 1.dp,
+            brush = SolidColor(
+                MaterialTheme.colorScheme.outline.copy(alpha = 0.25f)
+            )
+        ),
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.Top
+        ) {
+            if (icon != null) {
+                // 24dp icon column so the title's first line aligns consistently
+                // across banners with different icons (or none).
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                ) {
+                    Icon(
+                        painter = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Spacer(modifier = Modifier.width(14.dp))
+            }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = Typography.Heading.RegularMl,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = description,
+                    style = Typography.SmallMl,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
 @Composable
 @Preview
 fun WarningTip(text: String = "This is an example tip") {
@@ -274,19 +343,27 @@ fun SettingItem(
         Row(Modifier.weight(1.0f).fillMaxHeight().padding(0.dp, 4.dp)) {
             Spacer(Modifier.width(4.dp))
             Spacer(Modifier.width(16.dp))
-            Column(
-                modifier = Modifier
-                    .width(48.dp)
-                    .align(Alignment.CenterVertically)
-            ) {
-                Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    if (icon != null) {
+
+            // IMPROVEMENT (flush-left): previously the 48dp icon Column and its
+            // trailing 12dp Spacer were ALWAYS rendered, even when `icon == null`.
+            // That left a visible 60dp dead zone to the left of the title for any
+            // SettingItem that had no icon. Now the slot collapses to zero width
+            // when no icon is provided, so the text starts flush with the row's
+            // 16dp inner left padding. The 48dp Column and 12dp spacer are still
+            // rendered when an icon is provided so the existing layout (icon +
+            // 12dp gap + text) is preserved.
+            if (icon != null) {
+                Column(
+                    modifier = Modifier
+                        .width(48.dp)
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Box(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                         icon()
                     }
                 }
+                Spacer(Modifier.width(12.dp))
             }
-
-            Spacer(Modifier.width(12.dp))
 
             Row(
                 modifier = Modifier

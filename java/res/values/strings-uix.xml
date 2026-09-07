@@ -392,7 +392,8 @@
     <string name="misc_settings_open_source_licenses_subtitle">Contributors, translators, and third-party licenses.</string>
     <string name="misc_settings_project_repo">Hamp Keyboard project</string>
     <string name="misc_settings_project_repo_subtitle">Source code, issues, and release notes on GitHub.</string>
-    <string name="misc_settings_about_subtitle">Made with care.</string>
+    <string name="misc_settings_about_title">About this build</string>
+    <string name="misc_settings_about_description">Hamp Keyboard is a community fork of FUTO Keyboard. Made with care, by mugmarp.</string>
 
     <!-- Keyboard actions -->
     <string name="action_editor_title">Edit Actions</string>
