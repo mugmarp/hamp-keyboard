@@ -609,10 +609,7 @@ class LatinIME : InputMethodServiceCompose(), LatinIMELegacy.SuggestionStripCont
                     if (v.parent != null) (v.parent as ViewGroup).removeView(v)
                     v
                 } else {
-                    // ViewGroup is abstract; use a concrete FrameLayout for the
-                    // empty placeholder. It has no children and zero size, so
-                    // nothing draws while we wait for the real view.
-                    android.widget.FrameLayout(ctx)
+                    ViewGroup(ctx)
                 }
             },
             update = { currentView ->
