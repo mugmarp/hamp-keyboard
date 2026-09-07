@@ -232,6 +232,32 @@ val SwipeMenu = UserSettingsMenu(
             default = {false},
         ),
 
+        // IMPROVEMENT: "Show unsupported settings" used to be at the bottom of the page,
+        // where the last screenful of content (Shortcuts row) pushed it below the
+        // visible viewport. The user had to scroll to see it. Move it up here, right
+        // after the other swipe-related toggles, so the button (or the expanded
+        // legacy toggle) is visible without scrolling on first paint.
+        userSettingDecorationOnly {
+            val useLegacy = useDataStoreValue(LegacySwipeSetting)
+            val showUseLegacy = remember { mutableStateOf(useLegacy) }
+
+            Spacer(Modifier.height(8.dp))
+            if(!showUseLegacy.value) {
+                TextButton(onClick = {
+                    showUseLegacy.value = true
+                }) {
+                    Text(stringResource(R.string.swipe_settings_show_unsupported))
+                }
+            } else {
+                SettingToggleDataStore(
+                    title = stringResource(R.string.swipe_settings_use_old_swipe),
+                    subtitle = stringResource(
+                        if(useLegacy) R.string.swipe_settings_use_old_swipe_subtitle else R.string.swipe_settings_use_old_swipe_subtitle_short),
+                    setting = LegacySwipeSetting
+                )
+            }
+        },
+
         // KASROZ is primarily for English and the menu isn't translated, so it's hidden if user
         // doesn't have English layout
         UserSetting(R.string.swipe_settings_kasroz, subtitle = R.string.swipe_settings_kasroz_subtitle, visibilityCheck = {
@@ -284,26 +310,5 @@ val SwipeMenu = UserSettingsMenu(
             navigateTo = LongPressMenu.navPath,
             style = NavigationItemStyle.Misc
         ).copy(appearsInSearch=false),
-
-        userSettingDecorationOnly {
-            val useLegacy = useDataStoreValue(LegacySwipeSetting)
-            val showUseLegacy = remember { mutableStateOf(useLegacy) }
-
-            Spacer(Modifier.height(8.dp))
-            if(!showUseLegacy.value) {
-                TextButton(onClick = {
-                    showUseLegacy.value = true
-                }) {
-                    Text(stringResource(R.string.swipe_settings_show_unsupported))
-                }
-            } else {
-                SettingToggleDataStore(
-                    title = stringResource(R.string.swipe_settings_use_old_swipe),
-                    subtitle = stringResource(
-                        if(useLegacy) R.string.swipe_settings_use_old_swipe_subtitle else R.string.swipe_settings_use_old_swipe_subtitle_short),
-                    setting = LegacySwipeSetting
-                )
-            }
-        },
     )
 )

@@ -384,6 +384,17 @@
     <string name="settings_import_configuration_subtitle">If you previously exported your config, you can re-import it here.</string>
     <string name="settings_import_export_tags">backup, restore, save, load, export, import, transfer device</string>
 
+    <!-- Miscellaneous: build info, licenses, project links -->
+    <string name="misc_settings_build_info_title">Build info</string>
+    <string name="misc_settings_build_info_subtitle">Version name, code, and build flavor. Tap to copy.</string>
+    <string name="misc_settings_build_info_value">%1$s · build %2$d · %3$s</string>
+    <string name="misc_settings_open_source_licenses">Open source licenses</string>
+    <string name="misc_settings_open_source_licenses_subtitle">Contributors, translators, and third-party licenses.</string>
+    <string name="misc_settings_project_repo">Hamp Keyboard project</string>
+    <string name="misc_settings_project_repo_subtitle">Source code, issues, and release notes on GitHub.</string>
+    <string name="misc_settings_about_title">About this build</string>
+    <string name="misc_settings_about_description">Hamp Keyboard is a community fork of FUTO Keyboard. Made with care, by mugmarp.</string>
+
     <!-- Keyboard actions -->
     <string name="action_editor_title">Edit Actions</string>
     <string name="action_editor_subtitle">Edit favorite actions, pinned actions, and the action key next to the spacebar</string>
