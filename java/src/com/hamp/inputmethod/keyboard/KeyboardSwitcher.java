@@ -105,16 +105,49 @@ public final class KeyboardSwitcher implements SwitchActions {
     public void updateKeyboardTheme(@NonNull Context displayContext) {
         final boolean themeUpdated = updateKeyboardThemeAndContextThemeWrapper(
                 displayContext, KeyboardTheme.getKeyboardTheme(displayContext /* context */));
-        if (themeUpdated && mKeyboardView != null) {
+        if (!themeUpdated) {
+            return;
+        }
+
+        // FLICKER FIX (Step 3): the previous code unconditionally inflated a brand-new
+        // InputView and pushed it to the Compose layer via updateLegacyView(...). That
+        // caused the Compose AndroidView to be torn down and recreated, producing a
+        // 1-frame flicker of the previous keyboard. Combined with Step 1 (which prevents
+        // this method from being called on every focus change) and Step 2 (which makes
+        // the AndroidView node stable), the new behavior is:
+        //
+        //   * If the InputView has never been created (mKeyboardView == null, the very
+        //     first time the IME is shown), inflate as before.
+        //   * If the InputView already exists, do an in-place refresh: just re-apply
+        //     the MainKeyboardView settings. The next call to loadKeyboard(...) from
+        //     onStartInputViewInternal will reload the keyboard from the new themed
+        //     mThemeContext. This avoids the expensive inflate + reparent cycle.
+        //
+        // If a caller (e.g. KeyboardSwitcher.queueThemeSwitch + updateTheme) really
+        // needs the InputView to be rebuilt, it can still call onCreateInputView()
+        // directly — that path is preserved.
+        if (mKeyboardView == null) {
             mLatinIMELegacy.getLatinIME().updateLegacyView(onCreateInputView(
                     displayContext, mIsHardwareAcceleratedDrawingEnabled));
+        } else {
             mLatinIMELegacy.updateMainKeyboardViewSettings();
+            mKeyboardView.invalidateAllKeys();
         }
     }
 
     private boolean themeSwitchPending = false;
     public void queueThemeSwitch() {
         themeSwitchPending = true;
+    }
+
+    /**
+     * FLICKER FIX (Step 1 companion): lets the IME layer (LatinIMELegacy) know whether a
+     * theme switch has been queued since the last apply, so it can decide whether to re-apply
+     * the theme on a restarting onStartInputView. Without this, every focus change would
+     * trigger a no-op theme rebuild that still tore down the InputView.
+     */
+    public boolean isThemeSwitchPending() {
+        return themeSwitchPending;
     }
 
     private boolean updateKeyboardThemeAndContextThemeWrapper(final Context context,
