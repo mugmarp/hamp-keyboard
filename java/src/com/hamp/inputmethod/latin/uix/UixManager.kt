@@ -1392,7 +1392,27 @@ class UixManager(private val latinIME: LatinIME) {
 
 
     fun updateVisibility(shouldShowSuggestionsStrip: Boolean, fullscreenMode: Boolean) {
-        this.shouldShowSuggestionStrip.value = shouldShowSuggestionsStrip
+        // If user has enabled "Always show suggestions", override the system's request
+        // but still respect critical suppressions (password fields, etc.)
+        val ignoreAppSuggestionHiding = try {
+            Settings.getInstance().current?.shouldIgnoreAppSuggestionHiding() ?: false
+        } catch (e: Exception) {
+            false
+        }
+
+        if (ignoreAppSuggestionHiding) {
+            // User override: show suggestions unless critically suppressed
+            val settingsValues = Settings.getInstance().current
+            val criticallySuppressed = settingsValues?.let {
+                !it.mInputAttributes.mShouldShowSuggestions &&
+                (it.mInputAttributes.mIsPasswordField ||
+                 it.mInputAttributes.mInputTypeNoAutoCorrect)
+            } ?: false
+
+            this.shouldShowSuggestionStrip.value = !criticallySuppressed
+        } else {
+            this.shouldShowSuggestionStrip.value = shouldShowSuggestionsStrip
+        }
     }
 
     fun setSuggestions(suggestedWords: SuggestedWords?, rtlSubtype: Boolean, cfg: ExpandableSuggestionBarConfiguration) {
