@@ -1,7 +1,12 @@
 package com.hamp.inputmethod.latin.uix.settings.pages
 
-import android.content.Intent
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.stringResource
+import androidx.core.content.getSystemService
 import com.hamp.inputmethod.latin.R
 import com.hamp.inputmethod.latin.uix.ANIMATE_BUBBLE
 import com.hamp.inputmethod.latin.uix.AUDIO_FOCUS
@@ -9,12 +14,17 @@ import com.hamp.inputmethod.latin.uix.CAN_EXPAND_SPACE
 import com.hamp.inputmethod.latin.uix.DISALLOW_SYMBOLS
 import com.hamp.inputmethod.latin.uix.ENABLE_SOUND
 import com.hamp.inputmethod.latin.uix.PREFER_BLUETOOTH
+import com.hamp.inputmethod.latin.uix.SYSTEM_VOICE_INPUT_PACKAGE
 import com.hamp.inputmethod.latin.uix.USE_PERSONAL_DICT
 import com.hamp.inputmethod.latin.uix.USE_SYSTEM_VOICE_INPUT
 import com.hamp.inputmethod.latin.uix.USE_VAD_AUTOSTOP
 import com.hamp.inputmethod.latin.uix.VERBOSE_PROGRESS
+import com.hamp.inputmethod.latin.uix.settings.DropDownPickerSettingItem
 import com.hamp.inputmethod.latin.uix.settings.NavigationItemStyle
+import com.hamp.inputmethod.latin.uix.settings.Tip
+import com.hamp.inputmethod.latin.uix.settings.UserSetting
 import com.hamp.inputmethod.latin.uix.settings.UserSettingsMenu
+import com.hamp.inputmethod.latin.uix.settings.useDataStore
 import com.hamp.inputmethod.latin.uix.settings.useDataStoreValue
 import com.hamp.inputmethod.latin.uix.settings.userSettingNavigationItem
 import com.hamp.inputmethod.latin.uix.settings.userSettingToggleDataStore
@@ -23,15 +33,89 @@ private val visibilityCheckNotSystemVoiceInput = @Composable {
     useDataStoreValue(USE_SYSTEM_VOICE_INPUT) == false
 }
 
+private data class VoiceIMEInfo(
+    val builtin: Boolean,
+    val name: String,
+    val packageName: String,
+)
+
+@Composable
+fun usePackageReadableName(pkg: String): String? {
+    val context = LocalContext.current
+    return remember(pkg) {
+        try {
+            context.packageManager.getPackageInfo(pkg, 0)
+        } catch (e: Exception) {
+            null
+        }?.applicationInfo?.let {
+            context.packageManager.getApplicationLabel(it).toString()
+        }
+    }
+}
+
 val VoiceInputMenu = UserSettingsMenu(
     title = R.string.voice_input_settings_title,
     navPath = "voiceInput", registerNavPath = true,
     settings = listOf(
-        userSettingToggleDataStore(
-            title = R.string.voice_input_settings_disable_builtin_voice_input,
-            subtitle = R.string.voice_input_settings_disable_builtin_voice_input_subtitle,
-            setting = USE_SYSTEM_VOICE_INPUT
-        ),
+        UserSetting(
+            name = R.string.voice_input_settings_backend_system,
+            searchTagList = listOf(
+                R.string.voice_input_settings_disable_builtin_voice_input,
+                R.string.voice_input_settings_disable_builtin_voice_input_subtitle
+            )
+        ) {
+            val useExternal = useDataStore(USE_SYSTEM_VOICE_INPUT)
+            val externalPkg = useDataStore(SYSTEM_VOICE_INPUT_PACKAGE)
+
+            val context = LocalContext.current
+            val res = LocalResources.current
+            val options = remember(externalPkg.value) {
+                val imm = context.getSystemService<InputMethodManager>()!!
+                buildList {
+                    add(VoiceIMEInfo(true, "", ""))
+                    addAll(imm.enabledInputMethodList.filter { im ->
+                        im.packageName == externalPkg.value ||
+                            (0 until im.subtypeCount).map { im.getSubtypeAt(it) }
+                                .any { it.mode.lowercase() == "voice" }
+                    }.map {
+                        VoiceIMEInfo(false, it.loadLabel(context.packageManager)?.toString() ?: it.packageName, it.packageName)
+                    })
+                }
+            }
+
+            val currOption = remember(externalPkg.value) {
+                if (externalPkg.value == "") options[0] else
+                options.find { it.packageName == externalPkg.value }
+            }
+
+
+            DropDownPickerSettingItem(
+                stringResource(R.string.voice_input_settings_backend_system),
+                options,
+                currOption,
+                {
+                    useExternal.setValue(!it.builtin)
+                    externalPkg.setValue(it.packageName ?: "")
+                },
+                {
+                    if (it.builtin) res.getString(R.string.voice_input_settings_backend_system_internal)
+                    else it.name
+                }
+            )
+
+            if (useExternal.value && externalPkg.value.isNotEmpty()) {
+                val privacyWhitelist = listOf(
+                    "org.futo.voiceinput",
+                    "org.futo.voiceinput.dev",
+                    "dev.notune.transcribe",
+                    "dev.soupslurpr.transcribro"
+                )
+
+                if (!privacyWhitelist.contains(externalPkg.value))
+                    Tip(stringResource(R.string.voice_input_settings_backend_system_external_warning,
+                        currOption?.name ?: externalPkg.value))
+            }
+        },
 
         //if(!systemVoiceInput.value) {
         userSettingToggleDataStore(
