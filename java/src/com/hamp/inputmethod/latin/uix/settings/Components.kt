@@ -66,6 +66,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -686,20 +687,24 @@ fun HampSection(
         if(label != null) {
             SectionLabel(label)
         }
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            shape = RoundedCornerShape(16.dp),
-            shadowElevation = 2.dp,
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
+                .shadow(
+                    elevation = 2.dp,
+                    shape = RoundedCornerShape(16.dp),
+                    clip = false
+                )
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surface)
                 .border(
                     width = 1.dp,
                     brush = SolidColor(MaterialTheme.colorScheme.outline.copy(alpha = 0.25f)),
                     shape = RoundedCornerShape(16.dp)
                 )
         ) {
-            Column(content = content)
+            content()
         }
     }
     Spacer(modifier = Modifier.height(10.dp))

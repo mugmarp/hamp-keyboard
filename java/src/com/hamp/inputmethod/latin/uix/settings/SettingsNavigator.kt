@@ -2,6 +2,10 @@ package com.hamp.inputmethod.latin.uix.settings
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.navigation.NavGraphBuilder
@@ -129,10 +133,10 @@ fun SettingsNavigator(
         NavHost(
             navController = navController,
             startDestination = "home",
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
-            popEnterTransition = { EnterTransition.None },
-            popExitTransition = { ExitTransition.None }
+            enterTransition = { fadeIn(animationSpec = tween(220, easing = LinearOutSlowInEasing)) },
+            exitTransition = { fadeOut(animationSpec = tween(220, easing = LinearOutSlowInEasing)) },
+            popEnterTransition = { fadeIn(animationSpec = tween(220, easing = LinearOutSlowInEasing)) },
+            popExitTransition = { fadeOut(animationSpec = tween(220, easing = LinearOutSlowInEasing)) }
         ) {
             with(NavGraphBuilderWrapper(this)) {
                 composable<Route.AddLayout> { SelectLayoutsScreen(nav, it.lang.toLocale()) }
